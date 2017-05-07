@@ -7,9 +7,10 @@
 //
 
 #include <stdio.h>
-
+#include "board.h"
 
 int main(){
+    printf("Hello");
     
     return 0;
 }
