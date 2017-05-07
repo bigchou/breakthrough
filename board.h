@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef board_h
-#define board_h
+#ifndef board_hxx
+#define board_hxx
 #define BRD_SQ_NUM 120
 
 typedef unsigned long long US64;
@@ -40,6 +40,9 @@ struct Board{
     US64 pawns[3];
 };
 
+int SQ64(int* Sq120ToSq64, int sq120){
+    return Sq120ToSq64[sq120];
+}
 
 
 int FR2SQ(int f,int r){
@@ -65,6 +68,23 @@ void InitSq120To64(int* Sq120ToSq64, int* Sq64ToSq120){
             Sq120ToSq64[sq] = sq64;
             sq64++;
         }
+}
+
+void PrintBoard(int* Sq120ToSq64, int* Sq64ToSq120){
+    for(int i=0;i<BRD_SQ_NUM;++i){
+        if(i%10==0)
+            printf("\n");
+        printf("%4d",Sq120ToSq64[i]);
+    }
+    
+    printf("\n\n");
+    
+    for(int i=0;i<64;++i){
+        if(i%8==0)
+            printf("\n");
+        printf("%4d",Sq64ToSq120[i]);
+    }
+    printf("\n");
 }
 
 
