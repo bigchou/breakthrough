@@ -25,8 +25,7 @@
 /* Begin PBXFileReference section */
 		BF2CF3941EBEF836005483AB /* breakthrough */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = breakthrough; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF2CF3971EBEF836005483AB /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		BFE327371EB7B52B00BB603C /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		BFE327381EBEF33300BB603C /* board.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = board.h; sourceTree = "<group>"; };
+		BFE327381EBEF33300BB603C /* board.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = board.h; path = ../board.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +50,7 @@
 		BF2CF3961EBEF836005483AB /* breakthrough */ = {
 			isa = PBXGroup;
 			children = (
+				BFE327381EBEF33300BB603C /* board.h */,
 				BF2CF3971EBEF836005483AB /* main.cpp */,
 			);
 			path = breakthrough;
@@ -59,8 +59,6 @@
 		BFE327301EB7B4CE00BB603C = {
 			isa = PBXGroup;
 			children = (
-				BFE327371EB7B52B00BB603C /* main.cpp */,
-				BFE327381EBEF33300BB603C /* board.h */,
 				BF2CF3961EBEF836005483AB /* breakthrough */,
 				BF2CF3951EBEF836005483AB /* Products */,
 			);
