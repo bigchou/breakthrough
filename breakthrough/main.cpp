@@ -15,6 +15,8 @@
 int main(){
     int Sq120ToSq64[BRD_SQ_NUM];
     int Sq64ToSq120[64];
+    US64 SetMask[64];
+    US64 ClearMask[64];
     
     struct Board board;
     InitSq120To64(Sq120ToSq64,Sq64ToSq120);
@@ -26,6 +28,7 @@ int main(){
     //PrintBitBoard(playBitBoard, Sq120ToSq64);
     
     //printf("%d\n",SQ64(Sq120ToSq64,D2));
+    
     playBitBoard |= (1ULL << SQ64(Sq120ToSq64, D2));
     playBitBoard |= (1ULL << SQ64(Sq120ToSq64, D3));
     playBitBoard |= (1ULL << SQ64(Sq120ToSq64, D4));
@@ -43,6 +46,19 @@ int main(){
     //printf("D2 Added!\n");
     //PrintBitBoard(playBitBoard, Sq120ToSq64);
     
+    InitBitMasks(SetMask, ClearMask);
+    playBitBoard = 0ULL;
     
+    /*
+    for(int i =0;i<64;i++){
+        printf("Index:%d\n",i);
+        PrintBitBoard(ClearMask[i], Sq120ToSq64);
+    }*/
+    
+    SetBit(playBitBoard, 61, SetMask);
+    PrintBitBoard(playBitBoard, Sq120ToSq64);
+    
+    ClearBit(playBitBoard, 61, ClearMask);
+    PrintBitBoard(playBitBoard, Sq120ToSq64);
     return 0;
 }

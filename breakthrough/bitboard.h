@@ -62,5 +62,26 @@ int PopBit(US64 &bb){
     return BitTable[(fold * 0x783a9b23) >> 26];
 }
 
+void ClearBit(US64 &bb,int sq,US64 *ClearMask){
+    bb &= ClearMask[sq];
+}
+
+void SetBit(US64 &bb,int sq,US64 *SetMask){
+    bb |= SetMask[sq];
+}
+
+
+void InitBitMasks(US64* SetMask,US64* ClearMask){
+    int index = 0;
+    for(index = 0;index<64;++index){
+        SetMask[index] = 0ULL;
+        ClearMask[index] = 0ULL;
+    }
+    for(index = 0;index<64;++index){
+        SetMask[index] |= (1ULL << index);
+        ClearMask[index] = ~SetMask[index];
+    }
+}
+
 
 #endif /* bitboard_h */
