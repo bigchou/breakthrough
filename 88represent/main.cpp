@@ -1,5 +1,6 @@
-#include <cstdio>
+
 #include "board.h"
+#include <stdio.h>
 
 
 int main(){
@@ -9,7 +10,7 @@ int main(){
 	for(int i=0;i<120;++i)
 		M[i] = i;
 
-	
+	/*
 	for(int i=0;i<120;++i){
 		printf("%d   ",i);
 		if(!(M[i] & 0x88)){
@@ -17,7 +18,11 @@ int main(){
 		}else{
 			printf("unreachable\n");
 		}
-	}
+	}*/
+
+	Board board;
+	board.showBoard();
+
 
 	return 0;
 }
