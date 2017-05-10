@@ -7,3 +7,4 @@
 * [Chess Programming WIKI](https://chessprogramming.wikispaces.com/)
 * [Chess and Bitboards](http://pages.cs.wisc.edu/~psilord/blog/data/chess-pages/)
 * [BitBoard](https://www.xqbase.com/computer/struct_bitboard.htm)
+* [aimacode](https://github.com/aimacode)

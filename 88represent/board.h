@@ -26,6 +26,7 @@ public:
 			for(int j=0;j<8;++j)
 				this->board[16*i+j] = black;
 	}
+	// Display Board
 	void showBoard(){
 		printf("  A B C D E F G H\n");
 		for(int i=0;i<8;++i){
@@ -41,6 +42,11 @@ public:
 			printf("\n");
 		}
 	}
+	// Modify the element in the board
+	void setMove(int pos,Byte player){
+		this->board[pos] = player;
+	}
+
 };
 
 #endif /* board_h */

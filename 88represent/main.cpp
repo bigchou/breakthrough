@@ -21,6 +21,7 @@ int main(){
 	}*/
 
 	Board board;
+	board.setMove(1,black);
 	board.showBoard();
 
 
