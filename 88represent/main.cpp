@@ -1,6 +1,7 @@
 
 #include "board.h"
 #include "alphabeta.h"
+#include "utility.h"
 #include <stdio.h>
 #include <ctype.h>
 
@@ -8,10 +9,10 @@ int main(){
 
 
 	Board b;
-	b.setMove(0,empty);
-	bestMove(b);
-	return 0;
-	b.black_piece = 0;
+	//b.setMove(0,empty);
+	//bestMove(b);
+	//return 0;
+	//b.black_piece = 0;
 
 
 	while(!b.gameOver()){
@@ -19,10 +20,13 @@ int main(){
 		char playermove[4];
 		// Read user input
 		
-		printf("Please input the source and destination(e.g. 6 B -> 5 C)...> ");
-		scanf(" %c %c %c %c",&playermove[0],&playermove[1],&playermove[2],&playermove[3]);
-		int src = 16*(playermove[0]-'0') + (playermove[1]-'A');
-		int dest = 16*(playermove[2]-'0') + (playermove[3]-'A');
+		printf("Please input the source (e.g. 6 B)...> ");
+		//scanf(" %c %c %c %c",&playermove[0],&playermove[1],&playermove[2],&playermove[3]);
+		int src = InputSrc();
+		//int src = 16*(playermove[0]-'0') + (playermove[1]-'A');
+		printf("Please input the destination (e.g. 5 C)...> ");
+		int dest = InputDest();
+		//int dest = 16*(playermove[2]-'0') + (playermove[3]-'A');
 		b.setMove(dest,black);
 		b.setMove(src,empty);
 		//printf("%d\n",playermove);
