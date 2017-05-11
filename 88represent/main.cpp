@@ -1,5 +1,6 @@
 
 #include "board.h"
+#include "alphabeta.h"
 #include <stdio.h>
 #include <ctype.h>
 
@@ -7,7 +8,12 @@ int main(){
 
 
 	Board b;
+	b.setMove(0,empty);
+	bestMove(b);
+	return 0;
 	b.black_piece = 0;
+
+
 	while(!b.gameOver()){
 		Byte player = black;
 		char playermove[4];
