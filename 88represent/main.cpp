@@ -25,5 +25,12 @@ int main(){
 	board.showBoard();
 
 
+	vector<int> possible_moves;
+	board.possibleMoves(possible_moves);
+	for(int i=0;i<possible_moves.size();++i)
+		printf("%d ",possible_moves[i]);
+
+	
+
 	return 0;
 }
