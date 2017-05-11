@@ -15,6 +15,8 @@ class Board{
 public:
 	Byte board[120] = {0};
 	int moves = 0;
+	int white_piece = 16;
+	int black_piece = 16;
 	Board(){// Constructor
 		// Init White
 		for(int i=0;i<2;++i)
@@ -79,6 +81,19 @@ public:
 				}*/
 			}
 		}
+	}
+
+	// Whether the game is over or not
+	bool gameOver(){
+		if(black_piece == 0 || white_piece == 0)
+			return true;
+		for(int i=0;i<8;++i){
+			if(this->board[i] == black)
+				return true;
+			if(this->board[i+112] == white)
+				return true;
+		}
+		return false;
 	}
 
 };

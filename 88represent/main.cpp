@@ -1,9 +1,32 @@
 
 #include "board.h"
 #include <stdio.h>
-
+#include <ctype.h>
 
 int main(){
+
+
+	Board b;
+	b.black_piece = 0;
+	while(!b.gameOver()){
+		Byte player = black;
+		char playermove[4];
+		// Read user input
+		
+		printf("Please input the source and destination(e.g. 6 B -> 5 C)...> ");
+		scanf(" %c %c %c %c",&playermove[0],&playermove[1],&playermove[2],&playermove[3]);
+		int src = 16*(playermove[0]-'0') + (playermove[1]-'A');
+		int dest = 16*(playermove[2]-'0') + (playermove[3]-'A');
+		b.setMove(dest,black);
+		b.setMove(src,empty);
+		//printf("%d\n",playermove);
+		b.showBoard();
+	}
+	return 0;
+
+
+
+
 	printf("Hello Wolrd\n");
 	Byte M[120];
 
