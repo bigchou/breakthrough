@@ -29,8 +29,14 @@ int main(){
 	board.possibleMoves(possible_moves);
 	for(int i=0;i<possible_moves.size();++i)
 		printf("%d ",possible_moves[i]);
+	possible_moves.clear();
 
-	
-
+	board.setMove(119,empty);
+	board.setMove(118,empty);
+	board.setMove(103,white);
+	board.showBoard();
+	board.possibleMoves(possible_moves);
+	for(int i=0;i<possible_moves.size();++i)
+		printf("%d ",possible_moves[i]);
 	return 0;
 }

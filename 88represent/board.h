@@ -68,7 +68,7 @@ public:
 							tmp.push_back(16*i+j+k);
 					// the position is reachable and the element in it is black
 					for(int k=15;k<18;k+=2)
-						if(this->board[16*i+j+k] == black && (!(16*i+j+k & 0x88)))
+						if((!(16*i+j+k & 0x88)) && this->board[16*i+j+k] == black)
 							tmp.push_back(16*i+j+k);
 				}
 				//if(this->board[16*i+j] == empty)
