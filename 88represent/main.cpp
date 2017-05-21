@@ -7,18 +7,20 @@
 
 int main(){
 
-
+	Byte c = black;
+	printf("%d\n",c);
+	printf("%d\n",!c);
 	Board b;
 	//b.setMove(0,empty);
 	//bestMove(b);
 	//return 0;
 	//b.black_piece = 0;
 
-
+	vector<int> possiblemoves;
 	while(!b.gameOver()){
 		b.showBoard();
-		Byte player = black, ai = white;
-		char playermove[4];
+		Byte player = black;//, ai = white;
+		//char playermove[4];
 		// Read user input
 		
 		printf("Please input the source (e.g. 6 B)...> ");
@@ -27,11 +29,18 @@ int main(){
 		//int src = 16*(playermove[0]-'0') + (playermove[1]-'A');
 		printf("Please input the destination (e.g. 5 C)...> ");
 		int dest = inputDest();
+		b.possibleMoves(player,possiblemoves);
+		//for(int i=0;i<possiblemoves.size();++i)
 		//int dest = 16*(playermove[2]-'0') + (playermove[3]-'A');
+		if(!b.isMoveable(player,possiblemoves,src,dest)){
+			printf("Invalid move!\n");
+			possiblemoves.clear();
+			continue;
+		}
 		b.setMove(dest,player);
 		b.setMove(src,empty);
 		//printf("%d\n",playermove);
-		b.showBoard();
+		//b.showBoard();
 
 		if(b.gameOver())
 			break;
@@ -62,7 +71,8 @@ int main(){
 		}
 	}*/
 
-	Board board;
+	
+	/*Board board;
 	board.setMove(1,black);
 	board.showBoard();
 
@@ -79,6 +89,6 @@ int main(){
 	board.showBoard();
 	board.possibleMoves(possible_moves);
 	for(int i=0;i<possible_moves.size();++i)
-		printf("%d ",possible_moves[i]);
+		printf("%d ",possible_moves[i]);*/
 	return 0;
 }

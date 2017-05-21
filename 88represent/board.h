@@ -58,21 +58,29 @@ public:
 		this->board[pos] = player;
 	}
 	// Generate next possible board(s)
-	void possibleMoves(vector<int>& tmp){
+	void possibleMoves(Byte player,vector<int>& tmp){
 		// 0  1  2  3  4  ... 15
 		// 16 17 18 19 20 ... 32
-		for(int i=0;i<7;++i){// !!!
+		//printf("here\n");
+		for(int i=1;i<7;++i){// !!!
 			for(int j=0;j<8;++j){
-				if(this->board[16*i+j] == white){
+				if(this->board[16*i+j] == player){
+					//printf("%d ", 16*i+j);
+					int t = 0;
 					// the position is reachable and the elment in it is empty
-					for(int k=15;k<18;++k)
-						if(this->board[16*i+j+k] == empty && (!(16*i+j+k & 0x88)))
-							tmp.push_back(16*i+j+k);
+					for(int k=15;k<18;++k){
+						t = (player==white) ? k : -1*k;
+						if(this->board[16*i+j+t] == empty && (!(16*i+j+t & 0x88)))
+							tmp.push_back(16*i+j+t);
+					}
 					// the position is reachable and the element in it is black
-					for(int k=15;k<18;k+=2)
-						if((!(16*i+j+k & 0x88)) && this->board[16*i+j+k] == black)
-							tmp.push_back(16*i+j+k);
+					for(int k=15;k<18;k+=2){
+						t = (player==white) ? k : -1*k;
+						if((!(16*i+j+t & 0x88)) && (this->board[16*i+j+t] == (!player)))
+							tmp.push_back(16*i+j+t);
+					}
 				}
+
 				//if(this->board[16*i+j] == empty)
 				//	tmp.push_back(16*i+j);
 				/*
@@ -81,6 +89,10 @@ public:
 				}*/
 			}
 		}
+
+		for(int i=0;i<tmp.size();++i)
+			printf("%d ",tmp[i]);
+		printf("\n");
 	}
 
 	// Whether the game is over or not
@@ -94,6 +106,20 @@ public:
 				return true;
 		}
 		return false;
+	}
+
+	// whether the move is valid or not
+	bool isMoveable(Byte player, vector<int>& tmp,int src,int dest){
+		// Check source
+		if(this->board[src] == !player && this->board[src] == empty)
+			return false;
+		// Check destination
+		for(int i=0;i<tmp.size();++i){
+			if(dest == tmp[i])
+				return true;
+		}
+		return false;
+
 	}
 
 };
