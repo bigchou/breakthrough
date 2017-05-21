@@ -8,7 +8,7 @@ using namespace std;
 typedef unsigned char Byte;
 
 enum{
-	white = 1, black, empty
+	white = 0, black, empty
 };
 
 class Board{

@@ -16,21 +16,30 @@ int main(){
 
 
 	while(!b.gameOver()){
-		Byte player = black;
+		b.showBoard();
+		Byte player = black, ai = white;
 		char playermove[4];
 		// Read user input
 		
 		printf("Please input the source (e.g. 6 B)...> ");
 		//scanf(" %c %c %c %c",&playermove[0],&playermove[1],&playermove[2],&playermove[3]);
-		int src = InputSrc();
+		int src = inputSrc();
 		//int src = 16*(playermove[0]-'0') + (playermove[1]-'A');
 		printf("Please input the destination (e.g. 5 C)...> ");
-		int dest = InputDest();
+		int dest = inputDest();
 		//int dest = 16*(playermove[2]-'0') + (playermove[3]-'A');
-		b.setMove(dest,black);
+		b.setMove(dest,player);
 		b.setMove(src,empty);
 		//printf("%d\n",playermove);
 		b.showBoard();
+
+		if(b.gameOver())
+			break;
+		
+
+
+
+		
 	}
 	return 0;
 

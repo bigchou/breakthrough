@@ -3,17 +3,19 @@
 #include "board.h"
 #include <stdio.h>
 
-int InputSrc(){
+int inputSrc(){
 	char x, y;
 	scanf(" %c %c",&x,&y);
 	return 16*(x-'0') + (y-'A');
 }
 
-int InputDest(){
+int inputDest(){
 	char x, y;
 	scanf(" %c %c",&x,&y);
 	return 16*(x-'0') + (y-'A');
 }
+
+
 
 
 #endif /* utility_h */
