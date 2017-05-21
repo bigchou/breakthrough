@@ -2,11 +2,14 @@
 #include "board.h"
 #include "alphabeta.h"
 #include "utility.h"
+#include "randmove.h"
 #include <stdio.h>
 #include <ctype.h>
+#include <stdlib.h>
+#include <time.h>
 
 int main(){
-
+	srand((unsigned)time(NULL));
 	Byte c = black;
 	printf("%d\n",c);
 	printf("%d\n",!c);
@@ -16,9 +19,11 @@ int main(){
 	//return 0;
 	//b.black_piece = 0;
 
-	vector<int> possiblemoves;
+	
 	while(!b.gameOver()){
 		b.showBoard();
+		vector<int> possiblemoves;
+		vector<int> invertedlist;
 		Byte player = black;//, ai = white;
 		//char playermove[4];
 		// Read user input
@@ -29,37 +34,38 @@ int main(){
 		//int src = 16*(playermove[0]-'0') + (playermove[1]-'A');
 		printf("Please input the destination (e.g. 5 C)...> ");
 		int dest = inputDest();
-		b.possibleMoves(player,possiblemoves);
+		b.possibleMoves(player,possiblemoves,invertedlist);
 		//for(int i=0;i<possiblemoves.size();++i)
 		//int dest = 16*(playermove[2]-'0') + (playermove[3]-'A');
 		if(!b.isMoveable(player,possiblemoves,src,dest)){
 			printf("Invalid move!\n");
-			possiblemoves.clear();
 			continue;
 		}
 		b.setMove(dest,player);
 		b.setMove(src,empty);
+
+		b.showBoard();
+		if(b.gameOver())
+			break;
 		//printf("%d\n",playermove);
 		//b.showBoard();
 
-		if(b.gameOver())
-			break;
-		
-
-
-
-		
+		randMove(b,!player);
+		b.showBoard();
 	}
+
+	// Result
+	
 	return 0;
 
 
 
-
+	/*
 	printf("Hello Wolrd\n");
 	Byte M[120];
 
 	for(int i=0;i<120;++i)
-		M[i] = i;
+		M[i] = i;*/
 
 	/*
 	for(int i=0;i<120;++i){

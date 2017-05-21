@@ -52,13 +52,14 @@ public:
 			}
 			printf("\n");
 		}
+		printf("\n");
 	}
 	// Modify the element in the board
 	void setMove(int pos,Byte player){
 		this->board[pos] = player;
 	}
 	// Generate next possible board(s)
-	void possibleMoves(Byte player,vector<int>& tmp){
+	void possibleMoves(Byte player,vector<int>& tmp, vector<int>& invertedlist){
 		// 0  1  2  3  4  ... 15
 		// 16 17 18 19 20 ... 32
 		//printf("here\n");
@@ -70,14 +71,18 @@ public:
 					// the position is reachable and the elment in it is empty
 					for(int k=15;k<18;++k){
 						t = (player==white) ? k : -1*k;
-						if(this->board[16*i+j+t] == empty && (!(16*i+j+t & 0x88)))
+						if(this->board[16*i+j+t] == empty && (!(16*i+j+t & 0x88))){
 							tmp.push_back(16*i+j+t);
+							invertedlist.push_back(16*i+j);
+						}
 					}
 					// the position is reachable and the element in it is black
 					for(int k=15;k<18;k+=2){
 						t = (player==white) ? k : -1*k;
-						if((!(16*i+j+t & 0x88)) && (this->board[16*i+j+t] == (!player)))
+						if((!(16*i+j+t & 0x88)) && (this->board[16*i+j+t] == (!player))){
 							tmp.push_back(16*i+j+t);
+							invertedlist.push_back(16*i+j);
+						}
 					}
 				}
 
@@ -90,9 +95,9 @@ public:
 			}
 		}
 
-		for(int i=0;i<tmp.size();++i)
+		/*for(int i=0;i<tmp.size();++i)
 			printf("%d ",tmp[i]);
-		printf("\n");
+		printf("\n");*/
 	}
 
 	// Whether the game is over or not
@@ -119,7 +124,6 @@ public:
 				return true;
 		}
 		return false;
-
 	}
 
 };
