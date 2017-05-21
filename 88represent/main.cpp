@@ -55,7 +55,13 @@ int main(){
 	}
 
 	// Result
-	
+	Byte winner = b.getWinner();
+	if(winner == black)
+		printf("Black wins\n");
+	else if(winner == white)
+		printf("White wins\n");
+	else
+		printf("Draw\n");
 	return 0;
 
 

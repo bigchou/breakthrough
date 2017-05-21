@@ -126,6 +126,17 @@ public:
 		return false;
 	}
 
+	// get winner of this game
+	Byte getWinner(){
+		for(int i=0;i<8;++i){
+			if(this->board[i] == black)
+				return black;
+			if(this->board[i+112] == white)
+				return white;
+		}
+		return empty;
+	}
+
 };
 
 #endif /* board_h */
