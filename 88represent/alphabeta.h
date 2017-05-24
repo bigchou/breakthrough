@@ -56,6 +56,63 @@ int alphabetaNegamax(Board &b, Byte player,int alpha, int beta, int depth){
 	return v;
 }
 
+
+int alphabeta(Board &b, Byte player, int alpha, int beta,int depth){
+	if(b.gameOver()){
+		//printf("here\n");
+		Byte winner = b.getWinner();
+		if(winner == white)
+			return 2*betamax;
+		else
+			return 2*alphamax;
+	}
+	if(depth == 0)
+		return eval(b);
+
+	int v = alphamax;//negative infinity
+	vector<int> possiblemoves;
+	vector<int> invertedlist;
+	b.possibleMoves(player,possiblemoves,invertedlist);
+	int dest, src, tmp;
+	bool capturable = false;
+	for(int i=0;i<possiblemoves.size();++i){
+		capturable = false;
+		dest = possiblemoves[i];
+		src = invertedlist[i];
+		if(b.board[dest] == !player)
+			capturable = true;
+		b.setMove(dest,player);
+		b.setMove(src,empty);
+		tmp = alphabeta(b,!player,alpha,beta,depth-1);
+
+		// uodo
+		if(capturable == true)
+			b.setMove(dest,!player);
+		else
+			b.setMove(dest,empty);
+		b.setMove(src,player);
+
+		// black player and white ai
+		if(player == white){ // MAX(white) update alpha
+			if(tmp > alpha)
+				alpha = tmp;
+			if(alpha >= beta)
+				return beta;
+		}else{// MIN(black) update beta
+			if(tmp < beta)
+				beta = tmp;
+			if(alpha >= beta)
+				return alpha;
+		}
+	}
+	if(player == white){// MAX(white)
+		return alpha;
+	}else{// MIN(black)
+		return beta;
+	}
+}
+
+
 void bestMove(Board &b, Byte player){
 	//b.showBoard();
 	//int worstscore = alphamax;
@@ -65,7 +122,7 @@ void bestMove(Board &b, Byte player){
 	int bestdest, bestsrc;
 	b.possibleMoves(player,possiblemoves,invertedlist);
 	int dest, src;
-	int depth = 3;
+	int depth = 6;
 	//printf("move = %d\n",possiblemoves.size());
 	bool capturable = false;
 	for(int i=0;i<possiblemoves.size();++i){
@@ -78,7 +135,8 @@ void bestMove(Board &b, Byte player){
 		b.setMove(src,empty);
 		//printf("here\n");
 		//printf("No\n");
-		int score = alphabetaNegamax(b,!player,alphamax,betamax,depth-1);
+		//int score = alphabetaNegamax(b,!player,alphamax,betamax,depth-1);
+		int score = alphabeta(b,!player,alphamax,betamax,depth-1);
 		printf("%d -> %d   score = %d\n",src,dest,score);
 		if(capturable == true)
 			b.setMove(dest,!player);
