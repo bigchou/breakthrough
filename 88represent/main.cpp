@@ -50,7 +50,8 @@ int main(){
 		//printf("%d\n",playermove);
 		//b.showBoard();
 
-		randMove(b,!player);
+		bestMove(b,!player);
+		//randMove(b,!player);
 		b.showBoard();
 	}
 
