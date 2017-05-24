@@ -63,7 +63,7 @@ public:
 		// 0  1  2  3  4  ... 15
 		// 16 17 18 19 20 ... 32
 		//printf("here\n");
-		for(int i=1;i<7;++i){// !!!
+		for(int i=0;i<8;++i){// !!!
 			for(int j=0;j<8;++j){
 				if(this->board[16*i+j] == player){
 					//printf("%d ", 16*i+j);
@@ -71,7 +71,7 @@ public:
 					// the position is reachable and the elment in it is empty
 					for(int k=15;k<18;++k){
 						t = (player==white) ? k : -1*k;
-						if(this->board[16*i+j+t] == empty && (!(16*i+j+t & 0x88))){
+						if((!(16*i+j+t & 0x88)) && this->board[16*i+j+t] == empty){
 							tmp.push_back(16*i+j+t);
 							invertedlist.push_back(16*i+j);
 						}

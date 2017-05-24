@@ -19,7 +19,7 @@ int main(){
 	//return 0;
 	//b.black_piece = 0;
 
-	
+	b.board[80] = white;
 	while(!b.gameOver()){
 		b.showBoard();
 		vector<int> possiblemoves;

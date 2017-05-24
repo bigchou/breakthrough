@@ -6,12 +6,16 @@
 int inputSrc(){
 	char x, y;
 	scanf(" %c %c",&x,&y);
+	x = toupper(x);
+	y = toupper(y);
 	return 16*(x-'0') + (y-'A');
 }
 
 int inputDest(){
 	char x, y;
 	scanf(" %c %c",&x,&y);
+	x = toupper(x);
+	y = toupper(y);
 	return 16*(x-'0') + (y-'A');
 }
 

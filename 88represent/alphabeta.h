@@ -19,6 +19,7 @@ int alphabetaNegamax(Board &b, Byte player,int alpha, int beta, int depth){
 		return 2*betamax;
 	if(depth == 0)
 		return eval(b);
+	
 	int v = alphamax;//negative infinity
 	vector<int> possiblemoves;
 	vector<int> invertedlist;
@@ -27,17 +28,26 @@ int alphabetaNegamax(Board &b, Byte player,int alpha, int beta, int depth){
 	//printf("moves = %d\n",possiblemoves.size());
 	
 	int dest, src, tmp;
+	bool capturable = false;
 	for(int i=0;i<possiblemoves.size();++i){
+		capturable = false;
 		//printf("here\n");
 		dest = possiblemoves[i];
 		src = invertedlist[i];
-		//printf("i = %d  dest = %d   src = %d\n",i,dest, src);
+		if(b.board[dest] == !player)
+			capturable = true;
 		b.setMove(dest,player);
 		b.setMove(src,empty);
+		//printf("i = %d  dest = %d   src = %d\n",i,dest, src);
+		
 		tmp = -1 * alphabetaNegamax(b,!player,-1 * beta,-1 * alpha,depth-1);
-		v = (v>tmp)?v:tmp;
-		b.setMove(dest,empty);
+		if(capturable == true)
+			b.setMove(dest,!player);
+		else
+			b.setMove(dest,empty);
 		b.setMove(src,player);
+
+		v = (v>tmp)?v:tmp;
 		if(v>=beta)
 			return v;
 		alpha = (alpha>v)?alpha:v;
@@ -57,16 +67,23 @@ void bestMove(Board &b, Byte player){
 	int dest, src;
 	int depth = 3;
 	//printf("move = %d\n",possiblemoves.size());
+	bool capturable = false;
 	for(int i=0;i<possiblemoves.size();++i){
+		capturable = false;
 		dest = possiblemoves[i];
 		src = invertedlist[i];
+		if(b.board[dest] == !player)
+			capturable = true;
 		b.setMove(dest,player);
 		b.setMove(src,empty);
 		//printf("here\n");
 		//printf("No\n");
 		int score = alphabetaNegamax(b,!player,alphamax,betamax,depth-1);
-		printf("score = %d\n",score);
-		b.setMove(dest,empty);
+		printf("%d -> %d   score = %d\n",src,dest,score);
+		if(capturable == true)
+			b.setMove(dest,!player);
+		else
+			b.setMove(dest,empty);
 		b.setMove(src,player);
 		
 		if(i == 0){
