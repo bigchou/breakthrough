@@ -11,15 +11,17 @@
 int main(){
 	srand((unsigned)time(NULL));
 	Byte c = black;
-	printf("%d\n",c);
-	printf("%d\n",!c);
+	//printf("%d\n",c);
+	//printf("%d\n",!c);
 	Board b;
 	//b.setMove(0,empty);
 	//bestMove(b);
 	//return 0;
 	//b.black_piece = 0;
 
-	b.board[80] = white;
+	//b.board[80] = white;
+	//b.board[96] = white;
+	b.board[32] = black;
 	while(!b.gameOver()){
 		b.showBoard();
 		vector<int> possiblemoves;
@@ -28,11 +30,11 @@ int main(){
 		//char playermove[4];
 		// Read user input
 		
-		printf("Please input the source (e.g. 6 B)...> ");
+		printf("Please input the source and destination (e.g. 6 B 5 C)...> ");
 		//scanf(" %c %c %c %c",&playermove[0],&playermove[1],&playermove[2],&playermove[3]);
 		int src = inputSrc();
 		//int src = 16*(playermove[0]-'0') + (playermove[1]-'A');
-		printf("Please input the destination (e.g. 5 C)...> ");
+		//printf("Please input the destination (e.g. 5 C)...> ");
 		int dest = inputDest();
 		b.possibleMoves(player,possiblemoves,invertedlist);
 		//for(int i=0;i<possiblemoves.size();++i)
@@ -50,8 +52,10 @@ int main(){
 		//printf("%d\n",playermove);
 		//b.showBoard();
 
-		bestMove(b,!player);
+		//bestMov(b,!player);
+		//bestMove(b,!player);
 		//randMove(b,!player);
+		bestmove(b,!player,player);
 		b.showBoard();
 	}
 
