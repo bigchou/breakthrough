@@ -21,7 +21,7 @@ int main(){
 
 	//b.board[80] = white;
 	//b.board[96] = white;
-	b.board[32] = black;
+	//b.board[32] = black;
 	while(!b.gameOver()){
 		b.showBoard();
 		vector<int> possiblemoves;

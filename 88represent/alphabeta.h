@@ -7,19 +7,92 @@
 #include <time.h>
 #include <stdio.h>
 
+// bestmove
+int bestsrc;
+int bestdest;
+int maxdepth = 5;
 
-
+int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int beta);
 int abnegamax(Board &bb,int a,int b,int ply,int player);
 int eval(Board &b){
 	int tmp = rand() % betamax;
-	tmp = 10;
 	return tmp;
 }
 
 
+int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int beta){
+	int value;
+	// Terminal_test
+	if(depth <= 0){
+		return 0;
+	}
+	if(bb.gameOver()){
+		Byte winner = bb.getWinner();
+		if(winner == white){
+			return -999999-depth;
+		}
+		else{
+			return 99999+depth;
+		}
+	}
 
-int bestsrc;
-int bestdest;
+	// =========
+	vector<int> possiblemoves;
+	vector<int> invertedlist;
+	int dest, src;
+	bb.possibleMoves(player,possiblemoves,invertedlist); // Generate Moves
+	bool capturable = false;
+	for(int i=0;i<possiblemoves.size();++i){
+		// Exec move on b
+		capturable = false;
+		dest = possiblemoves[i];
+		src = invertedlist[i];
+		if(bb.board[dest] == !player)
+			capturable = true;
+		bb.setMove(dest,player);
+		bb.setMove(src,empty);
+
+		if(capturable == true){
+			value = 100 + depth;
+			if(depth == 1){
+				value -= abnegamax_incrupdate_quisc(bb,!player,depth,-1*beta+value,-1*alpha+value);
+			}else{
+				value -= abnegamax_incrupdate_quisc(bb,!player,depth-1,-1*beta+value,-1*alpha+value);
+			}
+		}else{
+			value  = 50 - abnegamax_incrupdate_quisc(bb,!player,depth-1,-1*beta+50,-1*alpha+50);
+		}
+
+		// Undo move
+		if(capturable == true)
+			bb.setMove(dest,!player);
+		else
+			bb.setMove(dest,empty);
+		bb.setMove(src,player);
+
+		if(value >= beta){
+			return value;
+		}
+
+		if(value > alpha){
+			alpha = value;
+			if(depth == maxdepth){
+				bestsrc = src;
+				bestdest = dest;
+			}
+		}
+	}
+
+	return alpha;
+}
+
+
+
+
+
+
+
+
 
 int abnegamax(Board &bb,int a,int b,int ply,int player){
 	// Terminal_test
@@ -81,12 +154,14 @@ int abnegamax(Board &bb,int a,int b,int ply,int player){
 }
 
 
-void bestmove(Board &b, Byte player, Byte opponent){
-	int ply = 3;
-	int score = abnegamax(b,-10000,10000,3,player);
+
+
+void bestmove(Board &bb, Byte player, Byte opponent){
+	
+	int score = abnegamax_incrupdate_quisc(bb,player,maxdepth,-99999999,99999999);
 	printf("%d -> %d    score:%d \n",bestsrc,bestdest,score);
-	b.setMove(bestdest,player);
-	b.setMove(bestsrc,empty);
+	bb.setMove(bestdest,player);
+	bb.setMove(bestsrc,empty);
 }
 
 

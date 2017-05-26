@@ -116,14 +116,37 @@ public:
 	// whether the move is valid or not
 	bool isMoveable(Byte player, vector<int>& tmp,int src,int dest){
 		// Check source
-		if(this->board[src] == !player && this->board[src] == empty)
+		if(this->board[src] == !player || this->board[src] == empty)
 			return false;
-		// Check destination
-		for(int i=0;i<tmp.size();++i){
-			if(dest == tmp[i])
-				return true;
+		if(!(src & 0x88) && !(dest & 0x88)){
+			int t = (player==white) ? 1 : -1;
+
+			if(src+t*15 == dest || src+t*17 == dest){
+				//diagonal
+				if( this->board[dest] == player){
+					return false;
+				}else{
+					return true;
+				}
+			}else if(src+t*16 == dest){
+				//straight
+				if( this->board[dest] == empty){
+					return true;
+				}else{
+					return false;
+				}
+			}else{
+				return false;
+			}
+		}else{
+			return false;
 		}
-		return false;
+
+		
+				
+		
+		
+		
 	}
 
 	// get winner of this game
