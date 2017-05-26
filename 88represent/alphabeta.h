@@ -1,8 +1,6 @@
 #ifndef alphabeta_h
 #define alphabeta_h
 #include "board.h"
-#define alphamax -99999 
-#define betamax 99999
 #include <stdlib.h>
 #include <time.h>
 #include <stdio.h>
@@ -10,30 +8,107 @@
 // bestmove
 int bestsrc;
 int bestdest;
-int maxdepth = 5;
+int maxdepth = 6;
 
 int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int beta);
 int abnegamax(Board &bb,int a,int b,int ply,int player);
-int eval(Board &b){
-	int tmp = rand() % betamax;
-	return tmp;
+
+int getpiecevalue(Board &bb, int loc){
+	int Value = 1300;
+	return Value;
+}
+
+
+int eval(Board &bb,Byte player){
+	int whiteleft = 0;
+	int blackleft = 0;
+	int Value = 0;
+	for(int i=0;i<8;++i){
+		int blackpieceOnCol = 0;
+		int whitepieceOnCol = 0;
+		for(int j=0;j<8;++j){
+			if(bb.board[16*i+j] == empty)
+				continue;
+
+			if(bb.board[16*i+j] == white){
+				++whiteleft;
+				++whitepieceOnCol;
+				// PieceValue (this is a function not implemented)
+				if(i == 6){
+					bool threatA = false;
+					bool threatB = false;
+					if(j > 0){
+						threatA = (bb.board[112+j-1] == empty);
+					}
+					if(j < 7){
+						threatB = (bb.board[112+j+1] == empty);
+					}
+					if(!(threatA && threatB))
+						Value -= 10000;
+				}else if(i == 0){
+					Value -= 10;
+				}
+			}else{
+				//Black
+				++blackleft;
+				++blackpieceOnCol;
+				// PieceValue (not implemented)
+				if(i == 1){
+					bool threatA = false;
+					bool threatB = false;
+					if(j > 0){
+						threatA = (bb.board[j-1] == empty);
+					}
+					if(j < 7){
+						threatB = (bb.board[j+1] == empty);
+					}
+					if(!(threatA && threatB))
+						Value += 10000;
+				}else if(i == 7){
+					Value += 10;
+				}
+			}
+		}
+
+		if(whitepieceOnCol == 0)
+			Value += 20;
+		if(blackpieceOnCol == 0)
+			Value -= 20;
+	}
+
+	bool BlackWins = (whiteleft==0);
+	bool WhiteWins = (blackleft==0);
+
+	if(WhiteWins)
+		Value-=999999;
+	if(BlackWins)
+		Value+=999999;
+
+	// if this round is for black
+	if((!player) == white)
+		Value = -1 * Value;
+
+	
+	return Value;
 }
 
 
 int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int beta){
 	int value;
 	// Terminal_test
-	if(depth <= 0){
-		return 0;
-	}
+	
 	if(bb.gameOver()){
 		Byte winner = bb.getWinner();
 		if(winner == white){
 			return -999999-depth;
 		}
 		else{
-			return 99999+depth;
+			return 999999+depth;
 		}
+	}
+
+	if(depth <= 0){
+		return eval(bb,player);
 	}
 
 	// =========
@@ -107,7 +182,7 @@ int abnegamax(Board &bb,int a,int b,int ply,int player){
 		}
 	}
 	if(ply == 0){
-		return eval(bb);
+		return eval(bb,player);
 	}
 
 	// =========
