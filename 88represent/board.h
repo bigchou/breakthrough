@@ -132,6 +132,10 @@ public:
 
 	// get winner of this game
 	Byte getWinner(){
+		if(this->white_piece == 0)
+			return black;
+		if(this->black_piece == 0)
+			return white;
 		for(int i=0;i<8;++i){
 			if(this->board[i] == white)
 				return white;

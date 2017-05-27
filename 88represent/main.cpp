@@ -10,7 +10,7 @@
 
 int main(){
 	srand((unsigned)time(NULL));
-	//Byte c = black;
+	int  c = white;
 	//printf("%d\n",c);
 	//printf("%d\n",!c);
 	Board b;
@@ -19,9 +19,15 @@ int main(){
 	//return 0;
 	//b.black_piece = 0;
 
-	//b.board[80] = white;
-	b.board[96] = black;
-	//b.board[32] = black;
+	// case 1
+	//b.board[96] = black;
+	// case 2
+	//b.board[16] = white;
+	// case 3
+	b.board[64] = black;
+	//b.board[80] = black;
+	b.board[112] = empty;
+	b.board[114] = empty;
 	while(!b.gameOver()){
 		b.showBoard();
 		vector<int> possiblemoves;
