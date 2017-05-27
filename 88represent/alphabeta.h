@@ -146,13 +146,15 @@ int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int be
 		else
 			bb.setMove(dest,empty);
 		bb.setMove(src,player);
-		printf("%d -> %d      score = %d\n",src,dest,value);
+		//printf("%d -> %d      score = %d\n",src,dest,value);
+		
 		if(value >= beta){
 			return value;
 		}
 
 		if(value > alpha){
 			alpha = value;
+			// Keep the best move on first layer
 			if(depth == maxdepth){
 				//printf("%d -> %d score:%d\n",src,dest,value);
 				bestsrc = src;
@@ -218,8 +220,11 @@ int abnegamax(Board &bb,int player,int depth,int a,int b){
 		}
 		if(v > a){
 			a = v;
-			bestsrc = src;
-			bestdest = dest;
+			// Keep the best move on first layer
+			if(depth == maxdepth){
+				bestsrc = src;
+				bestdest = dest;
+			}
 		}
 	}
 	return v;
