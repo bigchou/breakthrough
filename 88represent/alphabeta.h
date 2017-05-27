@@ -21,16 +21,90 @@
 
 
 // bestmove
-#define maxdepth 3
-int bestsrc;
-int bestdest;
+#define maxdepth 5
+int bestsrc = -1;
+int bestdest = -1;
 
 
 int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int beta);
 int abnegamax(Board &bb,int player,int depth,int a,int b);
 
-int getpiecevalue(Board &bb, int loc){
+int getpiecevalue(Board &bb, int loc,int i,int j){
 	int Value = 1300;
+	// Evaluation Connection
+	bool ConnectedH = false;
+	bool ConnectedV = false;
+	if(j > 0)
+		if(bb.board[loc-1] == bb.board[loc])
+			ConnectedH = true;
+	if(j < 7)
+		if(bb.board[loc+1] == bb.board[loc])
+			ConnectedH = true;
+	if(i > 0)
+		if(bb.board[loc-16] == bb.board[loc])
+			ConnectedV = true;
+	if(i < 7)
+		if(bb.board[loc+16] == bb.board[loc])
+			ConnectedV = true;
+	// Add Connection Value
+	if(ConnectedV)
+		Value += PieceConnectionVValue;
+	if(ConnectedH)
+		Value += PieceConnectionHValue;
+
+
+	// Predict Next Move
+	int AttckedValue = 0;
+	int ProtectedValue = 0;
+	int t = (bb.board[loc]==black)?1:-1;
+	for(int i=0;i < 1;++i){
+		if(bb.board[loc+15*t] != empty){
+			if(bb.board[loc+15*t] == (!bb.board[loc])){
+				// attack enemy
+				AttckedValue += PieceAttackValue;
+			}else{
+				// protected by someone
+				ProtectedValue += PieceProtectionValue;
+			}
+		}	
+		if(bb.board[loc+17*t] != empty){
+			if(bb.board[loc+17*t] == (!bb.board[loc])){
+				// attack enemy
+				AttckedValue += PieceAttackValue;
+			}else{
+				// protected by someone
+				ProtectedValue += PieceProtectionValue;
+			}
+		}	
+	}
+	// Add Protected Value
+	Value += PieceProtectionValue;
+	// Evaluate Attack
+	if(AttckedValue > 0){
+		Value -= AttckedValue;
+		if(ProtectedValue == 0)
+			Value -= AttckedValue;
+	}else{
+		if(ProtectedValue != 0){
+			// Pawns at the end that are not attacked are worth more points
+			if(bb.board[loc] == white){
+				if(i == 2)
+					Value += PieceDangerValue;
+				else if(i == 1)
+					Value += PieceHighDangerValue;
+			}else{
+				if(i == 5)
+					Value += PieceDangerValue;
+				else if(i == 1)
+					Value += PieceHighDangerValue;
+			}
+		}
+	}
+	// danger value
+	if(bb.board[loc] == white)
+		Value += i * PieceDangerValue;
+	else
+		Value += (8-i) * PieceDangerValue;
 	return Value;
 }
 
@@ -47,7 +121,7 @@ int eval(Board &bb,Byte player){
 				// White
 				// addition could be regarded as eliminating black's power
 				++whiteOnRow;
-				// PieceValue (this is a function not implemented)
+				Value += getpiecevalue(bb,16*i+j,i,j);
 				if(i == 1){
 					bool threatA = false;
 					bool threatB = false;
@@ -64,7 +138,7 @@ int eval(Board &bb,Byte player){
 				// Black
 				// subtraction could be regarded as enhancing black's power
 				++blackOnRow;
-				// PieceValue (not implemented)
+				Value -= getpiecevalue(bb,16*i+j,i,j);
 				if(i == 6){
 					bool threatA = false;
 					bool threatB = false;
@@ -234,9 +308,10 @@ int abnegamax(Board &bb,int player,int depth,int a,int b){
 
 
 void bestmove(Board &bb, Byte player){
-	int score = abnegamax(bb,player,maxdepth,-99999999,99999999);
-	//int score = abnegamax_incrupdate_quisc(bb,player,maxdepth,-99999999,99999999);
-	printf("%d -> %d    score:%d \n",bestsrc,bestdest,score);
+	//int score = abnegamax(bb,player,maxdepth,-99999999,99999999);
+	int score = abnegamax_incrupdate_quisc(bb,player,maxdepth,-99999999,99999999);
+	printf("AI's turn:\n%d %c -> %d %c    score:%d\n",bestsrc/16,'A'+bestsrc%16,bestdest/16,'A'+bestdest%16,score);
+	//printf("%d -> %d    score:%d \n",bestsrc,bestdest,score);
 	bb.setMove(bestdest,player);
 	bb.setMove(bestsrc,empty);
 }
