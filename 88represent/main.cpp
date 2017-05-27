@@ -20,7 +20,7 @@ int main(){
 	//b.black_piece = 0;
 
 	//b.board[80] = white;
-	//b.board[96] = white;
+	b.board[96] = black;
 	//b.board[32] = black;
 	while(!b.gameOver()){
 		b.showBoard();

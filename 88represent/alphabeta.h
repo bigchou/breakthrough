@@ -99,7 +99,7 @@ int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int be
 	
 	if(bb.gameOver()){
 		Byte winner = bb.getWinner();
-		if(winner == white){
+		if(winner == black){
 			return -999999-depth;
 		}
 		else{
