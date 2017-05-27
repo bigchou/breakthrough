@@ -108,7 +108,8 @@ int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int be
 	}
 
 	if(depth <= 0){
-		return eval(bb,player);
+		return 0;
+		//return eval(bb,player);
 	}
 
 	// =========
@@ -118,7 +119,7 @@ int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int be
 	bb.possibleMoves(player,possiblemoves,invertedlist); // Generate Moves
 	bool capturable = false;
 	for(int i=0;i<possiblemoves.size();++i){
-		// Exec move on b
+		// Exec move on board
 		capturable = false;
 		dest = possiblemoves[i];
 		src = invertedlist[i];
@@ -172,7 +173,6 @@ int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int be
 int abnegamax(Board &bb,int a,int b,int ply,int player){
 	// Terminal_test
 	if(bb.gameOver()){
-		printf("here\n");
 		Byte winner = bb.getWinner();
 		if(winner == white){
 			return 10000;
@@ -231,8 +231,7 @@ int abnegamax(Board &bb,int a,int b,int ply,int player){
 
 
 
-void bestmove(Board &bb, Byte player, Byte opponent){
-	
+void bestmove(Board &bb, Byte player){
 	int score = abnegamax_incrupdate_quisc(bb,player,maxdepth,-99999999,99999999);
 	printf("%d -> %d    score:%d \n",bestsrc,bestdest,score);
 	bb.setMove(bestdest,player);

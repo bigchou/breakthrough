@@ -18,24 +18,18 @@ public:
 	int white_piece = 16;
 	int black_piece = 16;
 	Board(){// Constructor
-		// Init White
+		// Init Black
 		for(int i=0;i<2;++i)
 			for(int j=0;j<8;++j)
-				this->board[16*i+j] = white;
+				this->board[16*i+j] = black;
 		// Init Empty
 		for(int i=2;i<6;++i)
 			for(int j=0;j<8;++j)
 				this->board[16*i+j] = empty;
-		// Init Black
+		// Init White
 		for(int i=6;i<8;++i)
 			for(int j=0;j<8;++j)
-				this->board[16*i+j] = black;
-		/*for(int i=0;i<8;++i){
-			for(int j=0;j<16;++j)
-				printf("%d ",this->board[16*i+j]);
-			printf("\n");
-		}*/
-		
+				this->board[16*i+j] = white;
 	}
 	// Display Board
 	void showBoard(){
@@ -62,42 +56,29 @@ public:
 	void possibleMoves(Byte player,vector<int>& tmp, vector<int>& invertedlist){
 		// 0  1  2  3  4  ... 15
 		// 16 17 18 19 20 ... 32
-		//printf("here\n");
-		for(int i=0;i<8;++i){// !!!
+		for(int i=0;i<8;++i){
 			for(int j=0;j<8;++j){
 				if(this->board[16*i+j] == player){
-					//printf("%d ", 16*i+j);
 					int t = 0;
 					// the position is reachable and the elment in it is empty
 					for(int k=15;k<18;++k){
-						t = (player==white) ? k : -1*k;
+						t = (player==black) ? k : -1*k;
 						if((!(16*i+j+t & 0x88)) && this->board[16*i+j+t] == empty){
 							tmp.push_back(16*i+j+t);
 							invertedlist.push_back(16*i+j);
 						}
 					}
-					// the position is reachable and the element in it is black
+					// the position is reachable and the element in it is opponent piece
 					for(int k=15;k<18;k+=2){
-						t = (player==white) ? k : -1*k;
+						t = (player==black) ? k : -1*k;
 						if((!(16*i+j+t & 0x88)) && (this->board[16*i+j+t] == (!player))){
 							tmp.push_back(16*i+j+t);
 							invertedlist.push_back(16*i+j);
 						}
 					}
 				}
-
-				//if(this->board[16*i+j] == empty)
-				//	tmp.push_back(16*i+j);
-				/*
-				if(!(this->board[16*i+j] & 0x88)){// be true if the position is reachable
-					tmp.push_back(16*i+j);
-				}*/
 			}
 		}
-
-		/*for(int i=0;i<tmp.size();++i)
-			printf("%d ",tmp[i]);
-		printf("\n");*/
 	}
 
 	// Whether the game is over or not
@@ -105,9 +86,9 @@ public:
 		if(black_piece == 0 || white_piece == 0)
 			return true;
 		for(int i=0;i<8;++i){
-			if(this->board[i] == black)
+			if(this->board[i] == white)
 				return true;
-			if(this->board[i+112] == white)
+			if(this->board[i+112] == black)
 				return true;
 		}
 		return false;
@@ -119,7 +100,7 @@ public:
 		if(this->board[src] == !player || this->board[src] == empty)
 			return false;
 		if(!(src & 0x88) && !(dest & 0x88)){
-			int t = (player==white) ? 1 : -1;
+			int t = (player == black) ? 1 : -1;
 
 			if(src+t*15 == dest || src+t*17 == dest){
 				//diagonal
@@ -152,10 +133,10 @@ public:
 	// get winner of this game
 	Byte getWinner(){
 		for(int i=0;i<8;++i){
-			if(this->board[i] == black)
-				return black;
-			if(this->board[i+112] == white)
+			if(this->board[i] == white)
 				return white;
+			if(this->board[i+112] == black)
+				return black;
 		}
 		return empty;
 	}

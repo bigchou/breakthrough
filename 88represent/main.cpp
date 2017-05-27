@@ -10,7 +10,7 @@
 
 int main(){
 	srand((unsigned)time(NULL));
-	Byte c = black;
+	//Byte c = black;
 	//printf("%d\n",c);
 	//printf("%d\n",!c);
 	Board b;
@@ -26,7 +26,7 @@ int main(){
 		b.showBoard();
 		vector<int> possiblemoves;
 		vector<int> invertedlist;
-		Byte player = black;//, ai = white;
+		Byte player = white;//, ai = black;
 		//char playermove[4];
 		// Read user input
 		
@@ -55,7 +55,7 @@ int main(){
 		//bestMov(b,!player);
 		//bestMove(b,!player);
 		//randMove(b,!player);
-		bestmove(b,!player,player);
+		bestmove(b,!player);
 		b.showBoard();
 	}
 
