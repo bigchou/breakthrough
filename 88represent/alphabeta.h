@@ -21,7 +21,7 @@
 
 
 // bestmove
-#define maxdepth 5
+#define maxdepth 4
 int bestsrc = -1;
 int bestdest = -1;
 
