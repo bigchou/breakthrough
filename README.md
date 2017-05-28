@@ -8,3 +8,4 @@
 * [Chess and Bitboards](http://pages.cs.wisc.edu/~psilord/blog/data/chess-pages/)
 * [BitBoard](https://www.xqbase.com/computer/struct_bitboard.htm)
 * [aimacode](https://github.com/aimacode)
+* [Bitboard Calculator](http://cinnamonchess.altervista.org/bitboard_calculator/Calc.html)

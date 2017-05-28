@@ -34,7 +34,7 @@ int main(){
 		//printf("Please input the destination (e.g. 5 C)...> ");
 		int dest = inputDest();
 		b.possibleMoves(player,possiblemoves,invertedlist);
-		if(!b.isMoveable(player,possiblemoves,src,dest)){
+		if(!b.isMoveable(player,src,dest)){
 			printf("Invalid move!\n");
 			continue;
 		}

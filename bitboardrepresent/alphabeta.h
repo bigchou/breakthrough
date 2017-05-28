@@ -37,15 +37,13 @@ int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int be
 		capturable = false;
 		dest = possiblemoves[i];
 		src = invertedlist[i];
-
 		U64 tmp_blackpawn = bb.blackpawn;
 		U64 tmp_whitepawn = bb.whitepawn;
 		U64 tmp_emptypawn = bb.emptypawn;
-
 		if(player == black){
 			if(  !(bb.blackpawn & mask[dest])   ){// reachable
-				U64 MoveStep = (((bb.blackpawn & mask[src]) & ~file[7]) << 9) | (((bb.blackpawn & mask[src]) & ~file[0]) << 7)  | ((bb.blackpawn & mask[src]) << 8);
-				U64 AttackStep = (((bb.blackpawn & mask[src]) & ~file[7]) << 9) | (((bb.blackpawn & mask[src]) & ~file[0]) << 7);
+				U64 MoveStep = (((bb.blackpawn & mask[src]) & ~file[fileh]) << 9) | (((bb.blackpawn & mask[src]) & ~file[filea]) << 7)  | ((bb.blackpawn & mask[src]) << 8);
+				U64 AttackStep = (((bb.blackpawn & mask[src]) & ~file[fileh]) << 9) | (((bb.blackpawn & mask[src]) & ~file[filea]) << 7);
 				if(MoveStep & mask[dest]){
 					if(bb.emptypawn & mask[dest]){
 						capturable = false;
@@ -66,9 +64,10 @@ int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int be
 				
 			}
 		}else{
+			// Black
 			if(  !(bb.whitepawn & mask[dest])   ){// reachable
-				U64 MoveStep = (((bb.whitepawn & mask[src]) & ~file[7]) >> 7) | (((bb.whitepawn & mask[src]) & ~file[0]) >> 9)  | ((bb.whitepawn & mask[src]) >> 8);
-				U64 AttackStep = (((bb.whitepawn & mask[src]) & ~file[7]) >> 7) | (((bb.whitepawn & mask[src]) & ~file[0]) >> 9);
+				U64 MoveStep = (((bb.whitepawn & mask[src]) & ~file[fileh]) >> 7) | (((bb.whitepawn & mask[src]) & ~file[filea]) >> 9)  | ((bb.whitepawn & mask[src]) >> 8);
+				U64 AttackStep = (((bb.whitepawn & mask[src]) & ~file[fileh]) >> 7) | (((bb.whitepawn & mask[src]) & ~file[filea]) >> 9);
 				if(MoveStep & mask[dest]){
 					if(bb.emptypawn & mask[dest]){
 						capturable = false;
@@ -115,7 +114,6 @@ int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int be
 			alpha = value;
 			// Keep the best move on first layer
 			if(depth == maxdepth){
-				//printf("%d -> %d score:%d\n",src,dest,value);
 				bestsrc = src;
 				bestdest = dest;
 			}
@@ -125,13 +123,11 @@ int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int be
 }
 
 void bestmove(Board &bb, Byte player){
-	//printf("AI's turn\n");
 	int score = abnegamax_incrupdate_quisc(bb,player,maxdepth,-99999999,99999999);
-	//printf("%d\n",score);
 	printf("AI's turn:\n%d %c -> %d %c    score:%d\n",bestsrc/8,'A'+bestsrc%8,bestdest/8,'A'+bestdest%8,score);
 	if(player == black){	
-		U64 MoveStep = (((bb.blackpawn & mask[bestsrc]) & ~file[7]) << 9) | (((bb.blackpawn & mask[bestsrc]) & ~file[0]) << 7)  | ((bb.blackpawn & mask[bestsrc]) << 8);
-		U64 AttackStep = (((bb.blackpawn & mask[bestsrc]) & ~file[7]) << 9) | (((bb.blackpawn & mask[bestsrc]) & ~file[0]) << 7);
+		U64 MoveStep = (((bb.blackpawn & mask[bestsrc]) & ~file[fileh]) << 9) | (((bb.blackpawn & mask[bestsrc]) & ~file[filea]) << 7)  | ((bb.blackpawn & mask[bestsrc]) << 8);
+		U64 AttackStep = (((bb.blackpawn & mask[bestsrc]) & ~file[fileh]) << 9) | (((bb.blackpawn & mask[bestsrc]) & ~file[filea]) << 7);
 		if(MoveStep & mask[bestdest]){
 			if(bb.emptypawn & mask[bestdest]){
 				bb.blackpawn ^= mask[bestsrc];

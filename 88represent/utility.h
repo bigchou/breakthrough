@@ -20,7 +20,4 @@ int inputDest(){
 	return 16*(x-'0') + (y-'A');
 }
 
-
-
-
 #endif /* utility_h */

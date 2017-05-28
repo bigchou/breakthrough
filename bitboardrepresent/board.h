@@ -55,15 +55,17 @@ public:
 		//blackpawn = 0x0000000000000001;
 		whitepawn = 0xFFFF000000000000;
 		blackpawn = 0x000000000000FFFF;
+		//whitepawn = 0xFFFE000000000000;
+		//blackpawn = 0x000100000000FFFF;
 		emptypawn = 0x0000FFFFFFFF0000;
 
-		
+		// Reset Mask
 		U64 tmp = 0x0000000000000001;
 		for(int i=0;i<64;++i){
 			mask[i] = (tmp << i);
-			//printf("%llu\n",mask[i]);
 		}
 	}
+
 	// Display Board
 	void showBoard(){
 		printf("  A B C D E F G H\n");
@@ -86,7 +88,6 @@ public:
 		}
 	}
 
-
 	// Whether the game is over or not
 	bool gameOver(){
 		if(whitepawn & 0x00000000000000FF)
@@ -98,7 +99,7 @@ public:
 		return false;
 	}
 
-	// get winner of this game
+	// Get winner of this game
 	Byte getWinner(){
 		if(this->white_piece == 0)
 			return black;
@@ -115,13 +116,14 @@ public:
 	// Generate next possible board(s)
 	void possibleMoves(Byte player,vector<int>& tmp, vector<int>& invertedlist){
 		if(player == white){
+			// White
 			int val = 0;
 			for(int i=0;i<8;++i){
 				val = 8*i;
 				for(int j=0;j<8;++j){
-					if( this->whitepawn & mask[val]){
+					if( this->whitepawn & mask[val]){// select a white piece
 						// the position is reachable and the elment in it is empty
-						U64 MoveStep = (((this->whitepawn & mask[val]) & ~file[7]) >> 7);
+						U64 MoveStep = (((this->whitepawn & mask[val]) & ~file[fileh]) >> 7);
 						if(MoveStep & mask[val-7]){
 							if(val - 7 >= 0 && (this->emptypawn & mask[val-7])){
 								tmp.push_back(val-7);
@@ -135,7 +137,7 @@ public:
 								invertedlist.push_back(val);
 							}
 						}
-						MoveStep = (((this->whitepawn & mask[val]) & ~file[0]) >> 9);
+						MoveStep = (((this->whitepawn & mask[val]) & ~file[filea]) >> 9);
 						if(MoveStep & mask[val-9]){
 							if(val - 9 >= 0 && (this->emptypawn & mask[val-9])){
 								tmp.push_back(val-9);
@@ -143,14 +145,14 @@ public:
 							}
 						}
 						// the position is reachable and the element in it is opponent piece
-						U64 AttackStep = (((this->whitepawn & mask[val]) & ~file[7]) >> 7);
+						U64 AttackStep = (((this->whitepawn & mask[val]) & ~file[fileh]) >> 7);
 						if(AttackStep & mask[val-7]){
 							if(val - 7 >= 0 && (this->blackpawn & mask[val-7])){
 								tmp.push_back(val-7);
 								invertedlist.push_back(val);
 							}
 						}
-						AttackStep = (((this->whitepawn & mask[val]) & ~file[0]) >> 9);
+						AttackStep = (((this->whitepawn & mask[val]) & ~file[filea]) >> 9);
 						if(AttackStep & mask[val-9]){
 							if(val - 9 >= 0 && (this->blackpawn & mask[val-9])){
 								tmp.push_back(val-9);
@@ -163,14 +165,13 @@ public:
 			}
 		}else{
 			// Black
-			//printf("Black\n");
 			int val = 0;
 			for(int i=0;i<8;++i){
 				val = 8*i;
 				for(int j=0;j<8;++j){
-					if( this->blackpawn & mask[val]){
+					if( this->blackpawn & mask[val]){// select a black piece
 						// the position is reachable and the elment in it is empty
-						U64 MoveStep = (((this->blackpawn & mask[val]) & ~file[7]) << 9);
+						U64 MoveStep = (((this->blackpawn & mask[val]) & ~file[fileh]) << 9);
 						if(MoveStep & mask[val+9]){
 							if(val + 9 < 64 && (this->emptypawn & mask[val+9])){
 								tmp.push_back(val+9);
@@ -184,7 +185,7 @@ public:
 								invertedlist.push_back(val);
 							}
 						}
-						MoveStep = (((this->blackpawn & mask[val]) & ~file[0]) << 7);
+						MoveStep = (((this->blackpawn & mask[val]) & ~file[filea]) << 7);
 						if(MoveStep & mask[val+7]){
 							if(val + 7 < 64 && (this->emptypawn & mask[val+7])){
 								tmp.push_back(val+7);
@@ -192,14 +193,14 @@ public:
 							}
 						}
 						// the position is reachable and the element in it is opponent piece
-						U64 AttackStep = (((this->blackpawn & mask[val]) & ~file[7]) << 9);
+						U64 AttackStep = (((this->blackpawn & mask[val]) & ~file[fileh]) << 9);
 						if(AttackStep & mask[val+9]){
 							if(val + 9 < 64 && (this->whitepawn & mask[val+9])){
 								tmp.push_back(val+9);
 								invertedlist.push_back(val);
 							}
 						}
-						AttackStep = (((this->blackpawn & mask[val]) & ~file[0]) << 7);
+						AttackStep = (((this->blackpawn & mask[val]) & ~file[filea]) << 7);
 						if(AttackStep & mask[val+7]){
 							if(val + 7 < 64 && (this->whitepawn & mask[val+7])){
 								tmp.push_back(val+7);

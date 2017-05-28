@@ -95,7 +95,7 @@ public:
 	}
 
 	// whether the move is valid or not
-	bool isMoveable(Byte player, vector<int>& tmp,int src,int dest){
+	bool isMoveable(Byte player, int src,int dest){
 		// Check source
 		if(this->board[src] == !player || this->board[src] == empty)
 			return false;
@@ -122,12 +122,6 @@ public:
 		}else{
 			return false;
 		}
-
-		
-				
-		
-		
-		
 	}
 
 	// get winner of this game
