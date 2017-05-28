@@ -51,8 +51,8 @@ public:
 	int white_piece = 16;
 	int black_piece = 16;
 	Board(){
-		whitepawn = 0x8000000000000000;
-		blackpawn = 0x0000000000000001;
+		//whitepawn = 0x8000000000000000;
+		//blackpawn = 0x0000000000000001;
 		whitepawn = 0xFFFF000000000000;
 		blackpawn = 0x000000000000FFFF;
 		emptypawn = 0x0000FFFFFFFF0000;
@@ -110,6 +110,108 @@ public:
 		if(blackpawn & 0xFF00000000000000)
 			return black;
 		return empty;
+	}
+
+	// Generate next possible board(s)
+	void possibleMoves(Byte player,vector<int>& tmp, vector<int>& invertedlist){
+		if(player == white){
+			int val = 0;
+			for(int i=0;i<8;++i){
+				val = 8*i;
+				for(int j=0;j<8;++j){
+					if( this->whitepawn & mask[val]){
+						// the position is reachable and the elment in it is empty
+						U64 MoveStep = (((this->whitepawn & mask[val]) & ~file[7]) >> 7);
+						if(MoveStep & mask[val-7]){
+							if(val - 7 >= 0 && (this->emptypawn & mask[val-7])){
+								tmp.push_back(val-7);
+								invertedlist.push_back(val);
+							}
+						}
+						MoveStep =  ((this->whitepawn & mask[val]) >> 8);
+						if(MoveStep & mask[val-8]){
+							if(val - 8 >= 0 && (this->emptypawn & mask[val-8])){
+								tmp.push_back(val-8);
+								invertedlist.push_back(val);
+							}
+						}
+						MoveStep = (((this->whitepawn & mask[val]) & ~file[0]) >> 9);
+						if(MoveStep & mask[val-9]){
+							if(val - 9 >= 0 && (this->emptypawn & mask[val-9])){
+								tmp.push_back(val-9);
+								invertedlist.push_back(val);
+							}
+						}
+						// the position is reachable and the element in it is opponent piece
+						U64 AttackStep = (((this->whitepawn & mask[val]) & ~file[7]) >> 7);
+						if(AttackStep & mask[val-7]){
+							if(val - 7 >= 0 && (this->blackpawn & mask[val-7])){
+								tmp.push_back(val-7);
+								invertedlist.push_back(val);
+							}
+						}
+						AttackStep = (((this->whitepawn & mask[val]) & ~file[0]) >> 9);
+						if(AttackStep & mask[val-9]){
+							if(val - 9 >= 0 && (this->blackpawn & mask[val-9])){
+								tmp.push_back(val-9);
+								invertedlist.push_back(val);
+							}
+						}						
+					}
+					val += 1;
+				}
+			}
+		}else{
+			// Black
+			//printf("Black\n");
+			int val = 0;
+			for(int i=0;i<8;++i){
+				val = 8*i;
+				for(int j=0;j<8;++j){
+					if( this->blackpawn & mask[val]){
+						// the position is reachable and the elment in it is empty
+						U64 MoveStep = (((this->blackpawn & mask[val]) & ~file[7]) << 9);
+						if(MoveStep & mask[val+9]){
+							if(val + 9 < 64 && (this->emptypawn & mask[val+9])){
+								tmp.push_back(val+9);
+								invertedlist.push_back(val);
+							}
+						}
+						MoveStep =  ((this->blackpawn & mask[val]) << 8);
+						if(MoveStep & mask[val+8]){
+							if(val + 8 < 64 && (this->emptypawn & mask[val+8])){
+								tmp.push_back(val+8);
+								invertedlist.push_back(val);
+							}
+						}
+						MoveStep = (((this->blackpawn & mask[val]) & ~file[0]) << 7);
+						if(MoveStep & mask[val+7]){
+							if(val + 7 < 64 && (this->emptypawn & mask[val+7])){
+								tmp.push_back(val+7);
+								invertedlist.push_back(val);
+							}
+						}
+						// the position is reachable and the element in it is opponent piece
+						U64 AttackStep = (((this->blackpawn & mask[val]) & ~file[7]) << 9);
+						if(AttackStep & mask[val+9]){
+							if(val + 9 < 64 && (this->whitepawn & mask[val+9])){
+								tmp.push_back(val+9);
+								invertedlist.push_back(val);
+							}
+						}
+						AttackStep = (((this->blackpawn & mask[val]) & ~file[0]) << 7);
+						if(AttackStep & mask[val+7]){
+							if(val + 7 < 64 && (this->whitepawn & mask[val+7])){
+								tmp.push_back(val+7);
+								invertedlist.push_back(val);
+							}
+						}						
+					}
+					val += 1;
+				}
+			}
+
+		}
 	}
 
 
