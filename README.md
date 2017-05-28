@@ -9,3 +9,5 @@
 * [BitBoard](https://www.xqbase.com/computer/struct_bitboard.htm)
 * [aimacode](https://github.com/aimacode)
 * [Bitboard Calculator](http://cinnamonchess.altervista.org/bitboard_calculator/Calc.html)
+* [Simple AI for the Game of Breakthrough](https://www.codeproject.com/Articles/37024/Simple-AI-for-the-Game-of-Breakthrough)
+* [LITTLEGOLEM](https://www.littlegolem.net)
