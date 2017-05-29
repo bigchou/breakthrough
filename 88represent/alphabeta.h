@@ -234,7 +234,9 @@ int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int be
 	vector<int> invertedlist;
 	int dest, src;
 	bb.possibleMoves(player,possiblemoves,invertedlist); // Generate Moves
-	moveOrdering(bb,player,possiblemoves,invertedlist);
+	if(possiblemoves.size() > 34)
+		moveOrdering(bb,player,possiblemoves,invertedlist);
+
 	bool capturable = false;
 	for(int i=0;i<possiblemoves.size();++i){
 		// Exec move on board
