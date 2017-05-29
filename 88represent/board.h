@@ -54,6 +54,8 @@ public:
 	}
 	// Generate next possible board(s)
 	void possibleMoves(Byte player,vector<int>& tmp, vector<int>& invertedlist){
+		// tmp is a destination vector
+		// invertedlist is a source vector
 		// 0  1  2  3  4  ... 15
 		// 16 17 18 19 20 ... 32
 		for(int i=0;i<8;++i){

@@ -6,22 +6,31 @@
 #include <stdio.h>
 
 
-#define WinValue 500000
-#define PieceAlmostWinValue 10000
-#define PieceValue 1300
-#define PieceDangerValue 10
-#define PieceHighDangerValue 100
-#define PieceAttackValue 50
-#define PieceProtectionValue 65
-#define PieceConnectionHValue 35
-#define PieceConnectionVValue 15
-#define PieceColumnHoleValue 20
-#define PieceHomeGroundValue 10
+#define WinValue 700000
+#define PieceAlmostWinValue 20000
+#define PieceValue 2600
+#define PieceDangerValue 20
+#define PieceHighDangerValue 200
+#define PieceAttackValue 100
+#define PieceProtectionValue 130
+#define PieceConnectionHValue 70
+#define PieceConnectionVValue 30
+#define PieceColumnHoleValue 40
+#define PieceHomeGroundValue 20
+#define PieceMoveValue 50
 
-
+// the structure is usage for move-ordering
+struct Pair {
+	int eval_score;
+    int src_score;
+    int dest_score;
+    bool operator<( const Pair& rhs ) const{
+    	return eval_score > rhs.eval_score;
+    }
+};
 
 // bestmove
-#define maxdepth 4
+#define maxdepth 6
 int bestsrc = -1;
 int bestdest = -1;
 
@@ -29,8 +38,8 @@ int bestdest = -1;
 int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int beta);
 int abnegamax(Board &bb,int player,int depth,int a,int b);
 
-int getpiecevalue(Board &bb, int loc,int i,int j){
-	int Value = 1300;
+int getPieceValue(Board &bb, int loc,int i,int j){
+	int Value = PieceValue;
 	// Evaluation Connection
 	bool ConnectedH = false;
 	bool ConnectedV = false;
@@ -121,7 +130,7 @@ int eval(Board &bb,Byte player){
 				// White
 				// addition could be regarded as eliminating black's power
 				++whiteOnRow;
-				Value += getpiecevalue(bb,16*i+j,i,j);
+				Value += getPieceValue(bb,16*i+j,i,j);
 				if(i == 1){
 					bool threatA = false;
 					bool threatB = false;
@@ -138,7 +147,7 @@ int eval(Board &bb,Byte player){
 				// Black
 				// subtraction could be regarded as enhancing black's power
 				++blackOnRow;
-				Value -= getpiecevalue(bb,16*i+j,i,j);
+				Value -= getPieceValue(bb,16*i+j,i,j);
 				if(i == 6){
 					bool threatA = false;
 					bool threatB = false;
@@ -166,6 +175,40 @@ int eval(Board &bb,Byte player){
 	return Value;
 }
 
+void moveOrdering(Board& bb,Byte player,vector<int>& possiblemoves, vector<int>& invertedlist){
+	vector<Pair> tmp;
+	for(int i=0;i<invertedlist.size();++i){
+		// Exec move on board
+		bool capturable = false;
+		int dest = possiblemoves[i];
+		int src = invertedlist[i];
+		if(bb.board[dest] == !player)
+			capturable = true;
+		bb.setMove(dest,player);
+		bb.setMove(src,empty);
+
+		// Get Evaluation Score
+		int eval_score = eval(bb,player);
+
+		// Undo Move
+		if(capturable == true)
+			bb.setMove(dest,!player);
+		else
+			bb.setMove(dest,empty);
+		bb.setMove(src,player);
+		// ==========
+		int src_score = invertedlist[i];
+		int dest_score = possiblemoves[i];
+		Pair obj = {eval_score,src_score,dest_score};
+		tmp.push_back(obj);
+	}
+	stable_sort(tmp.begin(),tmp.end());
+	// Re-Ordering
+	for(int i=0;i<tmp.size();++i){
+		possiblemoves[i] = tmp[i].dest_score;
+		invertedlist[i] = tmp[i].src_score;
+	}
+}
 
 int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int beta){
 	int value;
@@ -191,6 +234,7 @@ int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int be
 	vector<int> invertedlist;
 	int dest, src;
 	bb.possibleMoves(player,possiblemoves,invertedlist); // Generate Moves
+	moveOrdering(bb,player,possiblemoves,invertedlist);
 	bool capturable = false;
 	for(int i=0;i<possiblemoves.size();++i){
 		// Exec move on board
@@ -204,14 +248,14 @@ int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int be
 
 		// a-b with Negamax and Incremental Updates and quiescence search
 		if(capturable == true){
-			value = 100 + depth;
+			value = PieceAttackValue + depth;
 			if(depth == 1){
 				value -= abnegamax_incrupdate_quisc(bb,!player,depth,-1*beta+value,-1*alpha+value);
 			}else{
 				value -= abnegamax_incrupdate_quisc(bb,!player,depth-1,-1*beta+value,-1*alpha+value);
 			}
 		}else{
-			value  = 50 - abnegamax_incrupdate_quisc(bb,!player,depth-1,-1*beta+50,-1*alpha+50);
+			value  = PieceMoveValue - abnegamax_incrupdate_quisc(bb,!player,depth-1,-1*beta+PieceMoveValue,-1*alpha+PieceMoveValue);
 		}
 
 		// Undo move
@@ -238,14 +282,6 @@ int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int be
 	}
 	return alpha;
 }
-
-
-
-
-
-
-
-
 
 int abnegamax(Board &bb,int player,int depth,int a,int b){
 	// Terminal_test

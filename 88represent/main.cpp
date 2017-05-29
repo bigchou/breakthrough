@@ -23,6 +23,24 @@ int main(){
 	/*b.board[64] = black;
 	b.board[112] = empty;
 	b.board[114] = empty;*/
+
+	// case 5
+	/*
+	for(int i = 0;i<8;++i){
+		b.board[16+i] = empty;
+		b.board[32+i] = black;
+		b.board[64+i] = white;
+		b.board[96+i] = empty;
+	}*/
+	// 27.56 -> no ordering
+	// 23.82 -> ordering
+	// case 6
+	
+	/*b.board[71] = black;
+	b.board[117] = empty;
+	b.board[119] = empty;*/
+	// 11.59 -> no ordering
+	// 3.36 -> no ordering
 	while(!b.gameOver()){
 		b.showBoard();
 		vector<int> possiblemoves;
