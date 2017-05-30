@@ -51,6 +51,12 @@ int main(){
 	}
 	b.board[64] = empty;
 	b.board[80] = white;*/
+	/*for(int i = 0;i<8;++i){
+		b.board[96+i] = empty;
+		b.board[112+i] = empty;
+	}
+	b.board[64] = white;
+	b.board[65] = white;*/
 	while(!b.gameOver()){
 		b.showBoard();
 		Byte player = white; // AI = Black;

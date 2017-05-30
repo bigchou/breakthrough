@@ -63,6 +63,9 @@ public:
 		//blackpawn = 0x0000000000FF00FF;
 		//emptypawn = 0x00FFFE01FF00FF00;
 
+		//whitepawn = 0x0000000001000000;
+		//emptypawn = 0xFFFFFFFFFEFF0000;
+
 		// Reset Mask
 		U64 tmp = 0x0000000000000001;
 		for(int i=0;i<64;++i){

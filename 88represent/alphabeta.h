@@ -203,8 +203,13 @@ void moveOrdering(Board& bb,Byte player,vector<int>& possiblemoves, vector<int>&
 		bool capturable = false;
 		int dest = possiblemoves[i];
 		int src = invertedlist[i];
-		if(bb.board[dest] == !player)
+		if(bb.board[dest] == !player){
+			if(player == white)
+				bb.black_piece--;
+			else
+				bb.white_piece--;
 			capturable = true;
+		}
 		bb.setMove(dest,player);
 		bb.setMove(src,empty);
 
@@ -212,10 +217,15 @@ void moveOrdering(Board& bb,Byte player,vector<int>& possiblemoves, vector<int>&
 		int eval_score = eval(bb,player);
 
 		// Undo Move
-		if(capturable == true)
+		if(capturable == true){
 			bb.setMove(dest,!player);
-		else
+			if(player == white)
+				bb.black_piece++;
+			else
+				bb.white_piece++;
+		}else{
 			bb.setMove(dest,empty);
+		}
 		bb.setMove(src,player);
 		// ==========
 		int src_score = invertedlist[i];
@@ -264,8 +274,13 @@ int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int be
 		capturable = false;
 		dest = possiblemoves[i];
 		src = invertedlist[i];
-		if(bb.board[dest] == !player)
+		if(bb.board[dest] == !player){
+			if(player == white)
+				bb.black_piece--;
+			else
+				bb.white_piece--;
 			capturable = true;
+		}
 		bb.setMove(dest,player);
 		bb.setMove(src,empty);
 
@@ -282,10 +297,15 @@ int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int be
 		}
 
 		// Undo move
-		if(capturable == true)
+		if(capturable == true){
 			bb.setMove(dest,!player);
-		else
+			if(player == white)
+				bb.black_piece++;
+			else
+				bb.white_piece++;
+		}else{
 			bb.setMove(dest,empty);
+		}
 		bb.setMove(src,player);
 		//printf("%d -> %d      score = %d\n",src,dest,value);
 		
@@ -371,6 +391,12 @@ void bestmove(Board &bb, Byte player){
 	int score = abnegamax_incrupdate_quisc(bb,player,maxdepth,-99999999,99999999);
 	printf("AI's turn:\n%d %c -> %d %c    score:%d\n",bestsrc/16,'A'+bestsrc%16,bestdest/16,'A'+bestdest%16,score);
 	//printf("%d -> %d    score:%d \n",bestsrc,bestdest,score);
+	if(bb.board[bestdest] == !player){
+		if(player == white)
+			bb.black_piece--;
+		else
+			bb.white_piece--;
+	}
 	bb.setMove(bestdest,player);
 	bb.setMove(bestsrc,empty);
 }

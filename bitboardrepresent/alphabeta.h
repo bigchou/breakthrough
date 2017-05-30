@@ -40,6 +40,7 @@ int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int be
 		U64 tmp_blackpawn = bb.blackpawn;
 		U64 tmp_whitepawn = bb.whitepawn;
 		U64 tmp_emptypawn = bb.emptypawn;
+
 		if(player == black){
 			if(  !(bb.blackpawn & mask[dest])   ){// reachable
 				U64 MoveStep = (((bb.blackpawn & mask[src]) & ~file[fileh]) << 9) | (((bb.blackpawn & mask[src]) & ~file[filea]) << 7)  | ((bb.blackpawn & mask[src]) << 8);
@@ -58,13 +59,14 @@ int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int be
 							bb.blackpawn ^= mask[src];
 							bb.blackpawn |= mask[dest];
 							bb.emptypawn = ~(bb.whitepawn | bb.blackpawn);
+							bb.white_piece--;
 						}
 					}
 				}
 				
 			}
 		}else{
-			// Black
+			// White
 			if(  !(bb.whitepawn & mask[dest])   ){// reachable
 				U64 MoveStep = (((bb.whitepawn & mask[src]) & ~file[fileh]) >> 7) | (((bb.whitepawn & mask[src]) & ~file[filea]) >> 9)  | ((bb.whitepawn & mask[src]) >> 8);
 				U64 AttackStep = (((bb.whitepawn & mask[src]) & ~file[fileh]) >> 7) | (((bb.whitepawn & mask[src]) & ~file[filea]) >> 9);
@@ -81,6 +83,7 @@ int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int be
 							bb.whitepawn ^= mask[src];
 							bb.whitepawn |= mask[dest];
 							bb.emptypawn = ~(bb.whitepawn | bb.blackpawn);
+							bb.black_piece--;
 						}
 					}
 				}
@@ -104,6 +107,12 @@ int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int be
 		bb.blackpawn = tmp_blackpawn;
 		bb.whitepawn = tmp_whitepawn;
 		bb.emptypawn = tmp_emptypawn;
+		if(capturable == true){
+			if(player == white)
+				bb.black_piece++;
+			else
+				bb.white_piece++;
+		}
 
 
 		if(value >= beta){
@@ -139,6 +148,7 @@ void bestmove(Board &bb, Byte player){
 					bb.blackpawn ^= mask[bestsrc];
 					bb.blackpawn |= mask[bestdest];
 					bb.emptypawn = ~(bb.whitepawn | bb.blackpawn);
+					bb.white_piece -= 1;
 				}
 			}
 		}
