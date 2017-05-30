@@ -11,3 +11,6 @@
 * [Bitboard Calculator](http://cinnamonchess.altervista.org/bitboard_calculator/Calc.html)
 * [Simple AI for the Game of Breakthrough](https://www.codeproject.com/Articles/37024/Simple-AI-for-the-Game-of-Breakthrough)
 * [LITTLEGOLEM](https://www.littlegolem.net)
+* [OgAI](https://github.com/JakeBurchard/OgAI)
+* [Napoleon -- Cross-platform/cross-compiler chess engine written in C++](https://github.com/crybot/Napoleon/blob/master/zobrist.cpp)
+* [2016 年臺灣國際科學展覽會優勝作品專輯](http://activity.ntsec.gov.tw/activity/race-2/2016/pdf/190010.pdf)

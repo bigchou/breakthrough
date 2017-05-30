@@ -19,6 +19,13 @@
 #define PieceHomeGroundValue 20
 #define PieceMoveValue 50
 
+#define WhiteRank3Value 40
+#define WhiteRank2Value 160
+#define WhiteRank1Value 640
+#define BlackRank4Value 40
+#define BlackRank5Value 160
+#define BlackRank6Value 640
+
 // the structure is usage for move-ordering
 struct Pair {
 	int eval_score;
@@ -30,7 +37,7 @@ struct Pair {
 };
 
 // bestmove
-#define maxdepth 6
+#define maxdepth 4
 int bestsrc = -1;
 int bestdest = -1;
 
@@ -104,7 +111,7 @@ int getPieceValue(Board &bb, int loc,int i,int j){
 			}else{
 				if(i == 5)
 					Value += PieceDangerValue;
-				else if(i == 1)
+				else if(i == 6)
 					Value += PieceHighDangerValue;
 			}
 		}
@@ -131,7 +138,9 @@ int eval(Board &bb,Byte player){
 				// addition could be regarded as eliminating black's power
 				++whiteOnRow;
 				Value += getPieceValue(bb,16*i+j,i,j);
-				if(i == 1){
+				if(i == 0){
+					Value += WinValue;
+				}else if(i == 1){
 					bool threatA = false;
 					bool threatB = false;
 					if(j > 0)
@@ -140,6 +149,11 @@ int eval(Board &bb,Byte player){
 						threatB = (bb.board[j+1] == empty);
 					if(threatA && threatB)
 						Value += PieceAlmostWinValue;
+					Value += WhiteRank1Value;
+				}else if(i == 2){
+					Value += WhiteRank2Value;
+				}else if(i == 3){
+					Value += WhiteRank3Value;
 				}else if(i == 7){
 					Value += PieceHomeGroundValue;
 				}
@@ -148,7 +162,9 @@ int eval(Board &bb,Byte player){
 				// subtraction could be regarded as enhancing black's power
 				++blackOnRow;
 				Value -= getPieceValue(bb,16*i+j,i,j);
-				if(i == 6){
+				if(i == 7){
+					Value -= WinValue;
+				}else if(i == 6){
 					bool threatA = false;
 					bool threatB = false;
 					if(j > 0)
@@ -158,6 +174,11 @@ int eval(Board &bb,Byte player){
 					if(threatA && threatB){
 						Value -= PieceAlmostWinValue;
 					}
+					Value -= BlackRank6Value;
+				}else if(i == 5){
+					Value -= BlackRank5Value;
+				}else if(i == 4){
+					Value -= BlackRank4Value;
 				}else if(i == 0){
 					Value -= PieceHomeGroundValue;
 				}
@@ -250,8 +271,8 @@ int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int be
 
 		// a-b with Negamax and Incremental Updates and quiescence search
 		if(capturable == true){
-			value = PieceAttackValue + depth;
-			if(depth == 1){
+			value = PieceAttackValue + depth;// Capturing opponent piece earlier would be better
+			if(depth == 1){// do one more search if someone capture the piece at the bottom layer
 				value -= abnegamax_incrupdate_quisc(bb,!player,depth,-1*beta+value,-1*alpha+value);
 			}else{
 				value -= abnegamax_incrupdate_quisc(bb,!player,depth-1,-1*beta+value,-1*alpha+value);

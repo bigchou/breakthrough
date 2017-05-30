@@ -14,7 +14,6 @@ enum{
 class Board{
 public:
 	Byte board[120] = {0};
-	int moves = 0;
 	int white_piece = 16;
 	int black_piece = 16;
 	Board(){// Constructor
