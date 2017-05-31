@@ -3,6 +3,7 @@
 #include "alphabeta.h"
 #include "utility.h"
 #include "randmove.h"
+#include "transposition_table.h"
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
@@ -11,6 +12,15 @@
 int main(){
 	srand((unsigned)time(NULL));
 	Board b;
+	/*TT t;
+	U64 tmp = t.getZobristKey(b);
+	int xxx = t.lookUp(tmp);
+	if(xxx == -1)
+		printf("not exist!\n");
+	t.Insert(tmp,10);
+	xxx = t.lookUp(tmp);
+	if(xxx == -1)
+		printf("not exist!\n");*/
 	// case 1
 	//b.board[96] = black;
 	// case 2

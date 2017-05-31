@@ -1,6 +1,7 @@
 #ifndef alphabeta_h
 #define alphabeta_h
 #include "board.h"
+#include "transposition_table.h"
 #include <stdlib.h>
 #include <time.h>
 #include <stdio.h>
@@ -37,9 +38,12 @@ struct Pair {
 };
 
 // bestmove
-#define maxdepth 4
+#define maxdepth 5
 int bestsrc = -1;
 int bestdest = -1;
+
+// transposition_table
+TT ttable;
 
 
 int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int beta);
