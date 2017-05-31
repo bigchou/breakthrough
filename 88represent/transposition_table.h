@@ -5,7 +5,7 @@ typedef unsigned long long U64;
 
 class TT{
 public:
-	U64 piece_pattern[2][64] = {0};
+	U64 piece_pattern[2][64];
 	map<U64, int> ttable;
 
 	TT(){
