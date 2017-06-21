@@ -415,7 +415,7 @@ void bestmove(Board &bb, Byte player){
 
 
 
-	printf("AI's turn:\n%d %c -> %d %c    score:%d\n",bestsrc/16,'A'+bestsrc%16,bestdest/16,'A'+bestdest%16,score);
+	printf("AI's turn:\n%d %c -> %d %c    score:%d\n",8-bestsrc/16,'A'+bestsrc%16,8-bestdest/16,'A'+bestdest%16,score);
 	//printf("%d -> %d    score:%d \n",bestsrc,bestdest,score);
 	if(bb.board[bestdest] == !player){
 		if(player == white)

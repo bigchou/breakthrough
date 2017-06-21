@@ -34,7 +34,7 @@ public:
 	void showBoard(){
 		printf("  A B C D E F G H\n");
 		for(int i=0;i<8;++i){
-			printf("%d ",i);
+			printf("%d ",8-i);
 			for(int j=0;j<8;++j){
 				if(this->board[16*i+j] == white)
 					printf("W ");

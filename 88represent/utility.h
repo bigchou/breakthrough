@@ -9,7 +9,7 @@ int inputSrc(){
 	scanf(" %c %c",&x,&y);
 	x = toupper(x);
 	y = toupper(y);
-	return 16*(x-'0') + (y-'A');
+	return 16*('8'-x) + (y-'A');
 }
 
 int inputDest(){
@@ -17,7 +17,7 @@ int inputDest(){
 	scanf(" %c %c",&x,&y);
 	x = toupper(x);
 	y = toupper(y);
-	return 16*(x-'0') + (y-'A');
+	return 16*('8'-x) + (y-'A');
 }
 
 #endif /* utility_h */
