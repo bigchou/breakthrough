@@ -8,6 +8,11 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string>
+
+
+
+
 
 int main(){
 	srand((unsigned)time(NULL));
@@ -69,12 +74,12 @@ int main(){
 	b.board[65] = white;*/
 
 	
-
+	string recorder = "";
 	while(!b.gameOver()){
 		b.showBoard();
 		Byte player = white; // AI = Black;
 		// Read user input
-		printf("Please input the source and destination (e.g. 6 B 5 C)...> ");
+		printf("Please input the source and destination (e.g. 2 B 3 C)...> ");
 		int src = inputSrc();
 		//printf("Please input the destination (e.g. 5 C)...> ");
 		int dest = inputDest();
@@ -84,12 +89,17 @@ int main(){
 		}
 		b.setMove(dest,player);
 		b.setMove(src,empty);
-
+		
+		addRecord(recorder,src,dest);
+		
+		
+		// AI's turn 
 		b.showBoard();
 		if(b.gameOver())
 			break;
-		bestmove(b,!player);
+		bestmove(b,!player,recorder);
 		//b.showBoard();
+		break;
 	}
 	// Result
 	Byte winner = b.getWinner();
@@ -99,5 +109,8 @@ int main(){
 		printf("White wins\n");
 	else
 		printf("Draw\n");
+	
+	// Store Result
+	writeRecord(recorder);	
 	return 0;
 }

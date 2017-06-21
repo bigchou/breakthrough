@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include <algorithm>
 #include <time.h>
+#include <string>
+#include "utility.h"
 
 
 #define WinValue 700000
@@ -392,7 +394,7 @@ int abnegamax(Board &bb,int player,int depth,int a,int b){
 
 
 
-void bestmove(Board &bb, Byte player){
+void bestmove(Board &bb, Byte player, string &recorder){
 	//int score = abnegamax(bb,player,maxdepth,-99999999,99999999);
 	
 
@@ -405,7 +407,7 @@ void bestmove(Board &bb, Byte player){
 		maxdepth += 1;
 		printf("maxdepth: %d\n",maxdepth);
 		printf("time: %f\n",((double)(clock() - start) / (double)CLOCKS_PER_SEC));
-	}while(  ((double)(clock() - start) / (double)CLOCKS_PER_SEC) < 2.0 );
+	}while(  ((double)(clock() - start) / (double)CLOCKS_PER_SEC) < 0.3 );
 
 
 
@@ -425,6 +427,12 @@ void bestmove(Board &bb, Byte player){
 	}
 	bb.setMove(bestdest,player);
 	bb.setMove(bestsrc,empty);
+
+
+	
+
+
+	addRecord(recorder,bestsrc,bestdest);
 }
 
 
