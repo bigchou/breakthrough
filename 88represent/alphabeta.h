@@ -31,6 +31,8 @@
 #define BlackRank5Value 160
 #define BlackRank6Value 640
 
+#define TimeLimited 1.0
+
 // the structure is usage for move-ordering
 struct Pair {
 	int eval_score;
@@ -407,7 +409,7 @@ void bestmove(Board &bb, Byte player, string &recorder){
 		maxdepth += 1;
 		printf("maxdepth: %d\n",maxdepth);
 		printf("time: %f\n",((double)(clock() - start) / (double)CLOCKS_PER_SEC));
-	}while(  ((double)(clock() - start) / (double)CLOCKS_PER_SEC) < 0.3 );
+	}while(  ((double)(clock() - start) / (double)CLOCKS_PER_SEC) < TimeLimited );
 
 
 

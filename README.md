@@ -14,3 +14,7 @@
 * [OgAI](https://github.com/JakeBurchard/OgAI)
 * [Napoleon -- Cross-platform/cross-compiler chess engine written in C++](https://github.com/crybot/Napoleon/blob/master/zobrist.cpp)
 * [2016 年臺灣國際科學展覽會優勝作品專輯](http://activity.ntsec.gov.tw/activity/race-2/2016/pdf/190010.pdf)
+* [(C/C++) 計算程式效率 & 執行時間](http://mks.jitaiwan.net/1493/cc-%E8%A8%88%E7%AE%97%E6%99%82%E9%96%93%E7%A8%8B%E5%BC%8F%E7%9A%84%E5%9F%B7%E8%A1%8C%E6%99%82%E9%96%93)
+* [Standard Board Notation](https://en.wikipedia.org/wiki/Chessboard)
+
+

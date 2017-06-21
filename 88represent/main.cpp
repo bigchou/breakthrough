@@ -99,7 +99,6 @@ int main(){
 			break;
 		bestmove(b,!player,recorder);
 		//b.showBoard();
-		break;
 	}
 	// Result
 	Byte winner = b.getWinner();
