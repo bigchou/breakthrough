@@ -6,6 +6,7 @@
 #include <time.h>
 #include <stdio.h>
 #include <algorithm>
+#include <time.h>
 
 
 #define WinValue 700000
@@ -39,7 +40,7 @@ struct Pair {
 };
 
 // bestmove
-#define maxdepth 5
+int maxdepth = 5;
 int bestsrc = -1;
 int bestdest = -1;
 
@@ -393,7 +394,27 @@ int abnegamax(Board &bb,int player,int depth,int a,int b){
 
 void bestmove(Board &bb, Byte player){
 	//int score = abnegamax(bb,player,maxdepth,-99999999,99999999);
-	int score = abnegamax_incrupdate_quisc(bb,player,maxdepth,-99999999,99999999);
+	
+
+	maxdepth = 2;
+	int score;
+	time_t start;
+	do{
+		start = clock();
+		score = abnegamax_incrupdate_quisc(bb,player,maxdepth,-99999999,99999999);
+		maxdepth += 1;
+		printf("maxdepth: %d\n",maxdepth);
+		printf("time: %f\n",((double)(clock() - start) / (double)CLOCKS_PER_SEC));
+	}while(  ((double)(clock() - start) / (double)CLOCKS_PER_SEC) < 2.0 );
+
+
+
+
+
+
+
+
+
 	printf("AI's turn:\n%d %c -> %d %c    score:%d\n",bestsrc/16,'A'+bestsrc%16,bestdest/16,'A'+bestdest%16,score);
 	//printf("%d -> %d    score:%d \n",bestsrc,bestdest,score);
 	if(bb.board[bestdest] == !player){
