@@ -73,7 +73,7 @@ int main(){
 	b.board[64] = white;
 	b.board[65] = white;*/
 
-	
+
 	string recorder = "";
 	while(!b.gameOver()){
 		b.showBoard();
@@ -86,6 +86,13 @@ int main(){
 		if(!b.isMoveable(player,src,dest)){
 			printf("Invalid move!\n");
 			continue;
+		}
+		// Decrease # of Piece
+		if(b.board[dest] == !player){
+			if(player == white)
+				b.black_piece--;
+			else
+				b.white_piece--;
 		}
 		b.setMove(dest,player);
 		b.setMove(src,empty);
@@ -111,5 +118,8 @@ int main(){
 	
 	// Store Result
 	writeRecord(recorder);	
+
+	printf("white_piece: %d\n",b.white_piece);
+	printf("black_piece: %d\n",b.black_piece);
 	return 0;
 }
