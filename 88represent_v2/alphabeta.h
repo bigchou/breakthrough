@@ -31,7 +31,8 @@
 #define BlackRank5Value 160
 #define BlackRank6Value 640
 
-#define TimeLimited 1.0
+#define TimeLimited 2.0
+#define TimeUpSignal 999999999
 
 // the structure is usage for move-ordering
 struct Pair {
@@ -48,12 +49,15 @@ int maxdepth = 5;
 int bestsrc = -1;
 int bestdest = -1;
 
+// Time
+time_t start;
+bool timeUp = false;
+
 // transposition_table
 TT ttable;
 
 
 int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int beta);
-int abnegamax(Board &bb,int player,int depth,int a,int b);
 
 int getPieceValue(Board &bb, int loc,int i,int j){
 	int Value = PieceValue;
@@ -253,6 +257,10 @@ void moveOrdering(Board& bb,Byte player,vector<int>& possiblemoves, vector<int>&
 
 int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int beta){
 	int value;
+	
+
+
+
 	// Terminal_test
 	if(bb.gameOver()){
 		Byte winner = bb.getWinner();
@@ -269,6 +277,16 @@ int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int be
 	if(depth <= 0){
 		//return 0;
 		return eval(bb,player);
+	}
+
+	// TimeUp
+	if(  ((double)(clock() - start) / (double)CLOCKS_PER_SEC) > TimeLimited ){
+		//printf("TimeUp\n");
+		timeUp = true;
+		if(player == black)
+			return TimeUpSignal*-1;
+		else
+			return TimeUpSignal;
 	}
 	// =========
 	vector<int> possiblemoves;
@@ -336,63 +354,6 @@ int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int be
 	return alpha;
 }
 
-int abnegamax(Board &bb,int player,int depth,int a,int b){
-	// Terminal_test
-	if(bb.gameOver()){
-		Byte winner = bb.getWinner();
-		if(winner == player){
-			return 999999+depth;
-		}
-		else{
-			return -999999-depth;
-		}
-	}
-	if(depth <= 0){
-		return eval(bb,player);
-	}
-	// =========
-	vector<int> possiblemoves;
-	vector<int> invertedlist;
-	int dest, src;
-	bb.possibleMoves(player,possiblemoves,invertedlist);
-	bool capturable = false;
-	int v = -99999999;
-	for(int i=0;i<possiblemoves.size();++i){
-		// Exec move on board
-		capturable = false;
-		dest = possiblemoves[i];
-		src = invertedlist[i];
-		if(bb.board[dest] == !player)
-			capturable = true;
-		bb.setMove(dest,player);
-		bb.setMove(src,empty);
-
-		// AlphaBetaWithNegaMax
-		int tmp = -1 * abnegamax(bb, !player, depth-1,-1*b ,-1*a);
-
-		// Undo move
-		if(capturable == true)
-			bb.setMove(dest,!player);
-		else
-			bb.setMove(dest,empty);
-		bb.setMove(src,player);
-		
-		v = (tmp>v)?tmp:v;
-		if(v >= b){
-			return v;
-		}
-		if(v > a){
-			a = v;
-			// Keep the best move on first layer
-			if(depth == maxdepth){
-				bestsrc = src;
-				bestdest = dest;
-			}
-		}
-	}
-	return v;
-}
-
 
 
 
@@ -402,13 +363,26 @@ void bestmove(Board &bb, Byte player, string &recorder){
 
 	maxdepth = 2;
 	int score;
-	time_t start;
+	int history_src, history_dest;
 	do{
 		start = clock();
+		timeUp = false;
 		score = abnegamax_incrupdate_quisc(bb,player,maxdepth,-99999999,99999999);
-		maxdepth += 1;
+		// TimeUp
+		if(timeUp == true){
+			bestdest = history_dest;
+			bestsrc = history_src;
+			printf("time: %f\n",((double)(clock() - start) / (double)CLOCKS_PER_SEC));
+			break;
+		}else{
+			// Record history
+			history_dest = bestdest;
+			history_src = bestsrc;
+		}
 		printf("maxdepth: %d\n",maxdepth);
 		printf("time: %f\n",((double)(clock() - start) / (double)CLOCKS_PER_SEC));
+		// Update
+		maxdepth += 1;
 	}while(  ((double)(clock() - start) / (double)CLOCKS_PER_SEC) < TimeLimited );
 
 
