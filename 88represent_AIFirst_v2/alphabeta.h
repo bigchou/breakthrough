@@ -43,7 +43,7 @@
 #define BlackRank6Value 640
 
 
-#define TimeLimited 0.5
+#define TimeLimited 2.0
 #define TimeUpSignal 999999999
 
 // the structure is usage for move-ordering
@@ -363,21 +363,21 @@ int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int be
 	
 
 
-	if(ttable.lookUp(ttable.getZobristKey(bb)) != -1){
+	/*if(ttable.lookUp(ttable.getZobristKey(bb)) != -1){
 		return ttable.lookUp(ttable.getZobristKey(bb));
-	}
+	}*/
 
 	// Terminal_test
 	if(bb.gameOver()){
 		Byte winner = bb.getWinner();
 		if(winner == player){
-			U64 tmp = ttable.getZobristKey(bb);
-			ttable.Insert(tmp,999999+(depth<<5));
+			//U64 tmp = ttable.getZobristKey(bb);
+			//ttable.Insert(tmp,999999+(depth<<5));
 			return 999999+(depth<<5);
 		}
 		else{
-			U64 tmp = ttable.getZobristKey(bb);
-			ttable.Insert(tmp,-999999-(depth<<5));
+			//U64 tmp = ttable.getZobristKey(bb);
+			//ttable.Insert(tmp,-999999-(depth<<5));
 			return -999999-(depth<<5);
 		}
 		//same result
@@ -388,9 +388,9 @@ int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int be
 	}
 	if(depth <= 0){
 		//return 0;
-		U64 tmp = ttable.getZobristKey(bb);
+		//U64 tmp = ttable.getZobristKey(bb);
 		int val = eval(bb,player);
-		ttable.Insert(tmp,val);
+		//ttable.Insert(tmp,val);
 		return val;
 	}
 
@@ -475,8 +475,8 @@ int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int be
 			}
 		}
 	}
-	U64 tmp = ttable.getZobristKey(bb);
-	ttable.Insert(tmp,alpha);
+	//U64 tmp = ttable.getZobristKey(bb);
+	//ttable.Insert(tmp,alpha);
 	return alpha;
 }
 
@@ -512,7 +512,7 @@ void bestmove(Board &bb, Byte player, vector<char> &recorder){
 		
 	}while(  ((double)(clock() - start) / (double)CLOCKS_PER_SEC) < TimeLimited );
 	
-	ttable.Clear();
+	//ttable.Clear();
 
 
 
