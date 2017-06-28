@@ -6,6 +6,21 @@
 #include <string>
 #include <fstream>
 
+#include <string>
+#include <sstream>
+
+namespace patch
+{
+    template < typename T > std::string to_string( const T& n )
+    {
+        std::ostringstream stm ;
+        stm << n ;
+        return stm.str() ;
+    }
+}
+
+#include <iostream>
+
 int inputSrc(){
 	char x, y;
 	scanf(" %c %c",&x,&y);
@@ -51,7 +66,7 @@ void writeRecord(vector<char> &recorder){
 	fclose(fp);
 	// write move record
 	ofstream myfile;
-	myfile.open(std::to_string(count)+".txt");
+	myfile.open(patch::to_string(count)+".txt");
 	//myfile << recorder;
 	for(int i=0;i<recorder.size();i+=4){
 		myfile << recorder[i] << " " << recorder[i+1] << " - " << recorder[i+2] << " " << recorder[i+3] << endl;
@@ -60,7 +75,7 @@ void writeRecord(vector<char> &recorder){
 	// update info.txt
 	ofstream myfile2;
 	myfile2.open("info.txt");
-	myfile2 << std::to_string(count+1);
+	myfile2 << patch::to_string(count+1);
 	myfile2.close();
 }
 
