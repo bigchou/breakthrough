@@ -11,7 +11,10 @@ int inputSrc(){
 	scanf(" %c %c",&x,&y);
 	x = toupper(x);
 	y = toupper(y);
-	return 16*('8'-x) + (y-'A');
+	if(x == 'R' && y == 'R')
+		return -1000;
+	else
+		return 16*('8'-x) + (y-'A');
 }
 
 int inputDest(){
@@ -19,7 +22,10 @@ int inputDest(){
 	scanf(" %c %c",&x,&y);
 	x = toupper(x);
 	y = toupper(y);
-	return 16*('8'-x) + (y-'A');
+	if(x == 'R' && y == 'R')
+		return -1000;
+	else
+		return 16*('8'-x) + (y-'A');
 }
 
 void addRecord(vector<char> &recorder,int src, int dest){
@@ -63,6 +69,22 @@ void writeRecord(vector<char> &recorder){
 	myfile2 << std::to_string(count+1);
 	myfile2.close();
 }
+
+/*
+void Undo(vector<char> &recorder, Board &bb){
+	char destx = recorder.back();// A
+	recorder.pop_back();
+	char desty = recorder.back();// 8
+	recorder.pop_back();
+	int dest = 16*('8'-desty) + (destx-'A');
+	char srcx = recorder.back();
+	recorder.pop_back();
+	char srcy = recorder.back();
+	recorder.pop_back();
+	int src = 16*('8'-srcy) + (srcx-'A');
+
+
+}*/
 
 
 #endif /* utility_h */

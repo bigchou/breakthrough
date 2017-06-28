@@ -17,25 +17,19 @@
 int main(){
 	srand((unsigned)time(NULL));
 	Board b;
-
-	/*
-	for(int i=16;i<24;++i)
-		b.board[i] = empty;
-	b.board[50] = white;
-	b.board[32] = white;
-	b.board[16] = white;
-	b.board[1] = empty;
-	b.board[0] = empty;*/
-	/*
+	
 	int src;
 	int dest;
-	Byte player = white;
+	
 	bool err_flag = false;
-	string recorder = "";
+	//string recorder = "";
+	
+	vector<char> recorder;
 	while(!b.gameOver()){
+		Byte player = black;
 		if(!err_flag){
 			b.showBoard();
-			bestmove(b,player,recorder);
+			bestmove(b,!player,recorder);
 			b.showBoard();
 		}
 		if(b.gameOver())
@@ -45,53 +39,22 @@ int main(){
 		src = inputSrc();
 		//printf("Please input the destination (e.g. 5 C)...> ");
 		dest = inputDest();
-		if(!b.isMoveable(!player,src,dest)){
+		//Undo
+		if(src == -1000 && dest == -1000){
+			printf("Undo\n");
+			err_flag = true;
+			//Undo(recorder,b);
+			continue;
+		}else{
+			err_flag = false;
+		}
+
+		if(!b.isMoveable(player,src,dest)){
 			printf("Invalid move!\n");
 			err_flag = true;
 			continue;
 		}else{
 			err_flag = false;
-		}
-		b.setMove(dest,!player);
-		b.setMove(src,empty);
-
-		
-	}
-	// Result
-	Byte winner = b.getWinner();
-	if(winner == black)
-		printf("Black wins\n");
-	else if(winner == white)
-		printf("White wins\n");
-	else
-		printf("Draw\n");
-	return 0;
-	*/
-
-
-
-	
-	/*b.board[55] = black;
-	b.board[96] = black;
-	b.board[113] = empty;
-	b.board[112] = empty;
-	for(int i=16;i<23;++i)
-		b.board[i] = empty;
-	b.board[100] = black;
-	b.board[80] = black;*/
-	//string recorder = "";
-	vector<char> recorder;
-	while(!b.gameOver()){
-		b.showBoard();
-		Byte player = white; // AI = Black;
-		// Read user input
-		printf("Please input the source and destination (e.g. 2 B 3 C)...> ");
-		int src = inputSrc();
-		//printf("Please input the destination (e.g. 5 C)...> ");
-		int dest = inputDest();
-		if(!b.isMoveable(player,src,dest)){
-			printf("Invalid move!\n");
-			continue;
 		}
 		// Decrease # of Piece
 		if(b.board[dest] == !player){
@@ -102,16 +65,9 @@ int main(){
 		}
 		b.setMove(dest,player);
 		b.setMove(src,empty);
-		
 		addRecord(recorder,src,dest);
+
 		
-		
-		// AI's turn 
-		b.showBoard();
-		if(b.gameOver())
-			break;
-		bestmove(b,!player,recorder);
-		//b.showBoard();
 	}
 	// Result
 	Byte winner = b.getWinner();
@@ -121,12 +77,11 @@ int main(){
 		printf("White wins\n");
 	else
 		printf("Draw\n");
-	
+
 	// Store Result
 	writeRecord(recorder);	
 
 	printf("white_piece: %d\n",b.white_piece);
 	printf("black_piece: %d\n",b.black_piece);
 	return 0;
-	
 }

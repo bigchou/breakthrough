@@ -43,7 +43,7 @@
 #define BlackRank6Value 640
 
 
-#define TimeLimited 1.0
+#define TimeLimited 0.5
 #define TimeUpSignal 999999999
 
 // the structure is usage for move-ordering
