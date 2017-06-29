@@ -15,6 +15,7 @@
 
 
 int main(){
+	
 	srand((unsigned)time(NULL));
 	Board b;
 	
@@ -25,12 +26,21 @@ int main(){
 	//string recorder = "";
 	
 	vector<char> recorder;
+	vector<Board> history;
+
+	history.push_back(b);
+
 	while(!b.gameOver()){
 		Byte player = black;
 		if(!err_flag){
 			b.showBoard();
 			bestmove(b,!player,recorder);
 			b.showBoard();
+			history.push_back(b);
+		}else{
+			//printf("start\n");
+			b.showBoard();
+			//printf("end\n");
 		}
 		if(b.gameOver())
 			break;
@@ -43,7 +53,7 @@ int main(){
 		if(src == -1000 && dest == -1000){
 			printf("Undo\n");
 			err_flag = true;
-			//Undo(recorder,b);
+			Undo(history,recorder,b);
 			continue;
 		}else{
 			err_flag = false;
@@ -66,6 +76,7 @@ int main(){
 		b.setMove(dest,player);
 		b.setMove(src,empty);
 		addRecord(recorder,src,dest);
+		history.push_back(b);
 
 		
 	}
@@ -83,5 +94,10 @@ int main(){
 
 	printf("white_piece: %d\n",b.white_piece);
 	printf("black_piece: %d\n",b.black_piece);
+
+
+	int byebye;
+	printf("Press \'E\' to continue...\n");
+	scanf("%d",&byebye);
 	return 0;
 }

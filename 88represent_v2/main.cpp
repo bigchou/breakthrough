@@ -81,6 +81,9 @@ int main(){
 	b.board[80] = black;*/
 	//string recorder = "";
 	vector<char> recorder;
+	vector<Board> history;
+	history.push_back(b);
+
 	while(!b.gameOver()){
 		b.showBoard();
 		Byte player = white; // AI = Black;
@@ -89,6 +92,13 @@ int main(){
 		int src = inputSrc();
 		//printf("Please input the destination (e.g. 5 C)...> ");
 		int dest = inputDest();
+		//Undo
+		if(src == -1000 && dest == -1000){
+			printf("Undo\n");
+			Undo(history,recorder,b);
+			continue;
+		}
+
 		if(!b.isMoveable(player,src,dest)){
 			printf("Invalid move!\n");
 			continue;
@@ -104,6 +114,7 @@ int main(){
 		b.setMove(src,empty);
 		
 		addRecord(recorder,src,dest);
+		history.push_back(b);
 		
 		
 		// AI's turn 
@@ -111,6 +122,7 @@ int main(){
 		if(b.gameOver())
 			break;
 		bestmove(b,!player,recorder);
+		history.push_back(b);
 		//b.showBoard();
 	}
 	// Result
@@ -127,6 +139,11 @@ int main(){
 
 	printf("white_piece: %d\n",b.white_piece);
 	printf("black_piece: %d\n",b.black_piece);
+
+
+	int byebye;
+	printf("Press \'E\' to continue...\n");
+	scanf("%d",&byebye);
 	return 0;
 	
 }

@@ -88,21 +88,31 @@ void writeRecord(vector<char> &recorder){
 	myfile2.close();
 }
 
-/*
-void Undo(vector<char> &recorder, Board &bb){
-	char destx = recorder.back();// A
-	recorder.pop_back();
-	char desty = recorder.back();// 8
-	recorder.pop_back();
-	int dest = 16*('8'-desty) + (destx-'A');
-	char srcx = recorder.back();
-	recorder.pop_back();
-	char srcy = recorder.back();
-	recorder.pop_back();
-	int src = 16*('8'-srcy) + (srcx-'A');
+
+void Undo(vector<Board> &history, vector<char> &recorder, Board &bb){
+	
+	//printf("size:%lu\n",history.size());
+	if(history.size() == 2){// For AI First
+		return ;
+	}
+
+	history.pop_back();
+	for(int i=0;i<4;++i)
+		recorder.pop_back();
+	
 
 
-}*/
+	history.pop_back();
+	for(int i=0;i<4;++i)
+		recorder.pop_back();
+
+
+	bb = history.back();
+	/*history.pop_back();
+	for(int i=0;i<4;++i)
+		recorder.pop_back();*/
+	
+}
 
 
 #endif /* utility_h */

@@ -26,7 +26,10 @@ int inputSrc(){
 	scanf(" %c %c",&x,&y);
 	x = toupper(x);
 	y = toupper(y);
-	return 16*('8'-x) + (y-'A');
+	if(x == 'R' && y == 'R')
+		return -1000;
+	else
+		return 16*('8'-x) + (y-'A');
 }
 
 int inputDest(){
@@ -34,7 +37,10 @@ int inputDest(){
 	scanf(" %c %c",&x,&y);
 	x = toupper(x);
 	y = toupper(y);
-	return 16*('8'-x) + (y-'A');
+	if(x == 'R' && y == 'R')
+		return -1000;
+	else
+		return 16*('8'-x) + (y-'A');
 }
 
 void addRecord(vector<char> &recorder,int src, int dest){
@@ -77,6 +83,31 @@ void writeRecord(vector<char> &recorder){
 	myfile2.open("info.txt");
 	myfile2 << patch::to_string(count+1);
 	myfile2.close();
+}
+
+void Undo(vector<Board> &history, vector<char> &recorder, Board &bb){
+	
+	//printf("size:%lu\n",history.size());
+	if(history.size() == 1){// For AI First
+		return ;
+	}
+
+	history.pop_back();
+	for(int i=0;i<4;++i)
+		recorder.pop_back();
+	
+
+
+	history.pop_back();
+	for(int i=0;i<4;++i)
+		recorder.pop_back();
+
+
+	bb = history.back();
+	/*history.pop_back();
+	for(int i=0;i<4;++i)
+		recorder.pop_back();*/
+	
 }
 
 
