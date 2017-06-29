@@ -434,10 +434,10 @@ void moveOrdering(Board& bb,Byte player,vector<int>& possiblemoves, vector<int>&
 	}
 
 	// Prune something useless
-	for(int i=0;i<15;++i){
+	/*for(int i=0;i<15;++i){
 		possiblemoves.pop_back();
 		invertedlist.pop_back();
-	}
+	}*/
 
 }
 
