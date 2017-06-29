@@ -14,15 +14,24 @@
 #define WinValue 700000
 #define PieceAlmostWinValue 20000
 #define PieceValue 2600
-#define PieceDangerValue 20
-#define PieceHighDangerValue 200
+//#define PieceDangerValue 20
+//#define PieceHighDangerValue 200
 #define PieceAttackValue 100
-#define PieceProtectionValue 130
+//#define PieceProtectionValue 130
 #define PieceConnectionHValue 70
 #define PieceConnectionVValue 30
 #define PieceColumnHoleValue 40
 #define PieceHomeGroundValue 20
 #define PieceMoveValue 50
+
+int loctable[120] = {100,100,100,100,100,100,100,100,0,0,0,0,0,0,0,0,
+					10,20,30,40,40,30,20,10,0,0,0,0,0,0,0,0,
+					10,30,40,50,50,40,30,10,0,0,0,0,0,0,0,0,
+					20,40,50,100,100,50,40,20,0,0,0,0,0,0,0,0,
+					20,40,50,100,100,50,40,20,0,0,0,0,0,0,0,0,
+					10,30,40,50,50,40,30,10,0,0,0,0,0,0,0,0,
+					10,20,30,40,40,30,20,10,0,0,0,0,0,0,0,0,
+					100,100,100,100,100,100,100,100};
 
 /*
 #define WhiteRank4Value 40
@@ -95,7 +104,10 @@ int getPieceValue(Board &bb, int loc,int i,int j){
 		Value += PieceConnectionHValue;
 
 
+	Value += loctable[loc];
+
 	// Predict Next Move
+	/*
 	int AttckedValue = 0;
 	int ProtectedValue = 0;
 	int t = (bb.board[loc]==black)?1:-1;
@@ -119,6 +131,10 @@ int getPieceValue(Board &bb, int loc,int i,int j){
 			}
 		}	
 	}
+	*/
+
+	/*
+
 	// Add Protected Value
 	Value += PieceProtectionValue;
 	// Evaluate Attack
@@ -140,6 +156,7 @@ int getPieceValue(Board &bb, int loc,int i,int j){
 				else if(i == 6)
 					Value += PieceHighDangerValue;
 			}
+			
 		}
 	}
 	// danger value
@@ -147,6 +164,9 @@ int getPieceValue(Board &bb, int loc,int i,int j){
 		Value += i * PieceDangerValue;
 	else
 		Value += (8-i) * PieceDangerValue;
+
+
+	*/
 	return Value;
 }
 
@@ -235,72 +255,135 @@ int evalGlobal(Board &bb, Byte player){
 
 int eval(Board &bb,Byte player){
 	int Value = 0;
-	for(int i=0;i<8;++i){
-		int blackOnRow = 0;
-		int whiteOnRow = 0;
-		for(int j=0;j<8;++j){
-			if(bb.board[16*i+j] == empty)
-				continue;
-			if(bb.board[16*i+j] == white){
-				// White
-				// addition could be regarded as eliminating black's power
-				++whiteOnRow;
-				Value += getPieceValue(bb,16*i+j,i,j);
-				if(i == 0){
-					Value += WinValue;
-				}else if(i == 1){
-					bool threatA = false;
-					bool threatB = false;
-					if(j > 0)
-						threatA = (bb.board[j-1] == empty);
-					if(j < 7)
-						threatB = (bb.board[j+1] == empty);
-					if(threatA && threatB)
-						Value += PieceAlmostWinValue;
-					Value += WhiteRank1Value;
-				}else if(i == 2){
-					Value += WhiteRank2Value;
-				}else if(i == 3){
-					Value += WhiteRank3Value;
-				}else if(i == 7){
-					Value += PieceHomeGroundValue;
-				}
-			}else{
-				// Black
-				// subtraction could be regarded as enhancing black's power
-				++blackOnRow;
-				Value -= getPieceValue(bb,16*i+j,i,j);
-				if(i == 7){
-					Value -= WinValue;
-				}else if(i == 6){
-					bool threatA = false;
-					bool threatB = false;
-					if(j > 0)
-						threatA = (bb.board[112+j-1] == empty);
-					if(j < 7)
-						threatB = (bb.board[112+j+1] == empty);
-					if(threatA && threatB){
-						Value -= PieceAlmostWinValue;
+	if(player == white){
+		for(int i=0;i<8;++i){
+			int blackOnRow = 0;
+			int whiteOnRow = 0;
+			for(int j=0;j<8;++j){
+				if(bb.board[16*i+j] == empty)
+					continue;
+				if(bb.board[16*i+j] == white){
+					// White
+					// addition could be regarded as eliminating black's power
+					++whiteOnRow;
+					Value += getPieceValue(bb,16*i+j,i,j);
+					if(i == 0){
+						Value += WinValue;
+					}else if(i == 1){
+						bool threatA = false;
+						bool threatB = false;
+						if(j > 0)
+							threatA = (bb.board[j-1] == empty);
+						if(j < 7)
+							threatB = (bb.board[j+1] == empty);
+						if(threatA && threatB)
+							Value += PieceAlmostWinValue;
+						Value += WhiteRank1Value;
+					}else if(i == 2){
+						Value += WhiteRank2Value;
+					}else if(i == 3){
+						Value += WhiteRank3Value;
+					}else if(i == 7){
+						Value += PieceHomeGroundValue;
 					}
-					Value -= BlackRank6Value;
-				}else if(i == 5){
-					Value -= BlackRank5Value;
-				}else if(i == 4){
-					Value -= BlackRank4Value;
-				}else if(i == 0){
-					Value -= PieceHomeGroundValue;
+				}else{
+					// Black
+					// subtraction could be regarded as enhancing black's power
+					++blackOnRow;
+					Value -= getPieceValue(bb,16*i+j,i,j);
+					if(i == 7){
+						Value -= WinValue;
+					}else if(i == 6){
+						bool threatA = false;
+						bool threatB = false;
+						if(j > 0)
+							threatA = (bb.board[112+j-1] == empty);
+						if(j < 7)
+							threatB = (bb.board[112+j+1] == empty);
+						if(threatA && threatB){
+							Value -= PieceAlmostWinValue;
+						}
+						Value -= BlackRank6Value;
+					}else if(i == 5){
+						Value -= BlackRank5Value;
+					}else if(i == 4){
+						Value -= BlackRank4Value;
+					}else if(i == 0){
+						Value -= PieceHomeGroundValue;
+					}
 				}
 			}
+			if(whiteOnRow == 0)
+				Value -= PieceColumnHoleValue;//enhance black's power
+			if(blackOnRow == 0)
+				Value += PieceColumnHoleValue;//eliminate black's power
 		}
-		if(whiteOnRow == 0)
-			Value -= PieceColumnHoleValue;//enhance black's power
-		if(blackOnRow == 0)
-			Value += PieceColumnHoleValue;//eliminate black's power
+	}else{
+		// black
+		for(int i=0;i<8;++i){
+			int blackOnRow = 0;
+			int whiteOnRow = 0;
+			for(int j=0;j<8;++j){
+				if(bb.board[16*i+j] == empty)
+					continue;
+				if(bb.board[16*i+j] == white){
+					++whiteOnRow;
+					Value -= getPieceValue(bb,16*i+j,i,j);
+					if(i == 0){
+						Value -= WinValue;
+					}else if(i == 1){
+						bool threatA = false;
+						bool threatB = false;
+						if(j > 0)
+							threatA = (bb.board[j-1] == empty);
+						if(j < 7)
+							threatB = (bb.board[j+1] == empty);
+						if(threatA && threatB)
+							Value -= PieceAlmostWinValue;
+						Value -= WhiteRank1Value;
+					}else if(i == 2){
+						Value -= WhiteRank2Value;
+					}else if(i == 3){
+						Value -= WhiteRank3Value;
+					}else if(i == 7){
+						Value -= PieceHomeGroundValue;
+					}
+				}else{
+					++blackOnRow;
+					Value += getPieceValue(bb,16*i+j,i,j);
+					if(i == 7){
+						Value += WinValue;
+					}else if(i == 6){
+						bool threatA = false;
+						bool threatB = false;
+						if(j > 0)
+							threatA = (bb.board[112+j-1] == empty);
+						if(j < 7)
+							threatB = (bb.board[112+j+1] == empty);
+						if(threatA && threatB){
+							Value += PieceAlmostWinValue;
+						}
+						Value += BlackRank6Value;
+					}else if(i == 5){
+						Value += BlackRank5Value;
+					}else if(i == 4){
+						Value += BlackRank4Value;
+					}else if(i == 0){
+						Value += PieceHomeGroundValue;
+					}
+				}
+			}
+			if(whiteOnRow == 0)
+				Value += PieceColumnHoleValue;//enhance black's power
+			if(blackOnRow == 0)
+				Value -= PieceColumnHoleValue;//eliminate black's power
+		}
+
 	}
 	// Invert Value for Negamax
 
-	if(player == black)
-		Value *= -1;
+	/*if(player == black)
+		Value *= -1;*/
 	
 	return Value;
 }
@@ -351,10 +434,10 @@ void moveOrdering(Board& bb,Byte player,vector<int>& possiblemoves, vector<int>&
 	}
 
 	// Prune something useless
-	/*for(int i=0;i<10;++i){
+	for(int i=0;i<15;++i){
 		possiblemoves.pop_back();
 		invertedlist.pop_back();
-	}*/
+	}
 
 }
 
