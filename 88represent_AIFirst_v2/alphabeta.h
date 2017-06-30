@@ -52,7 +52,7 @@ int loctable[120] = {100,100,100,100,100,100,100,100,0,0,0,0,0,0,0,0,
 #define BlackRank6Value 640
 
 
-#define TimeLimited 2.0
+double TimeLimited = 2.0;
 #define TimeUpSignal 999999999
 
 // the structure is usage for move-ordering
@@ -79,6 +79,23 @@ TT ttable;
 
 
 int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int beta);
+
+double setTimeLimited(){
+	double tmp;
+	
+	if(FILE *fp = fopen("timeControl.txt","r")){
+		fscanf(fp,"%lf",&tmp);
+		TimeLimited = tmp;
+		printf("TimeLimited: %f\n",TimeLimited);
+		fclose(fp);
+		return tmp;
+	}else{
+		tmp = TimeLimited;
+		printf("timeControl.txt not exists, so the TimeLimited is %f by default\n",TimeLimited);
+		return tmp;
+	}
+}
+
 
 int getPieceValue(Board &bb, int loc,int i,int j){
 	int Value = PieceValue;

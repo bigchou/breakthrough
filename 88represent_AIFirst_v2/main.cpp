@@ -15,7 +15,7 @@
 
 
 int main(){
-	
+	setTimeLimited();
 	srand((unsigned)time(NULL));
 	Board b;
 	

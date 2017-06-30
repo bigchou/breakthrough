@@ -17,7 +17,7 @@
 int main(){
 	srand((unsigned)time(NULL));
 	Board b;
-
+	setTimeLimited();
 	/*
 	for(int i=16;i<24;++i)
 		b.board[i] = empty;
