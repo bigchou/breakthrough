@@ -50,10 +50,14 @@ struct Pair {
 int maxdepth = 5;
 int bestsrc = -1;
 int bestdest = -1;
+vector<int> possiblebestsrc;
+vector<int> possiblebestdest;
 
 // Time
 time_t start;
 bool timeUp = false;
+bool EnableRandom = false;
+bool randomness = 9;// choosing the best move in 90%
 
 
 int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int beta);
@@ -369,6 +373,8 @@ int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int be
 			if(depth == maxdepth){
 				bestsrc = src;
 				bestdest = dest;
+				possiblebestsrc.push_back(bestsrc);
+				possiblebestdest.push_back(bestdest);
 			}
 		}
 	}
@@ -392,11 +398,25 @@ void bestmove(Board &bb, Byte player, vector<char> &recorder){
 			bestsrc = history_src;
 			//printf("time(sec): %f\n",((double)(clock() - start) / (double)CLOCKS_PER_SEC));
 			printf("TimeUp!\n");
+			possiblebestsrc.clear();
+			possiblebestdest.clear();
 			break;
 		}else{
 			// Record history
-			history_dest = bestdest;
-			history_src = bestsrc;
+			if(EnableRandom && possiblebestdest.size() >= 2){
+				if( rand() % 10 >= randomness ){
+					history_dest = possiblebestdest[possiblebestdest.size()-2];
+					history_src = possiblebestsrc[possiblebestsrc.size()-2];
+				}else{
+					history_dest = possiblebestdest[possiblebestdest.size()-1];
+					history_src = possiblebestsrc[possiblebestsrc.size()-1];
+				}
+			}else{
+				history_dest = bestdest;
+				history_src = bestsrc;
+			}
+			possiblebestsrc.clear();
+			possiblebestdest.clear();
 		}
 		printf("Depth_%d\t\ttime(sec): %f\n",maxdepth,((double)(clock() - start) / (double)CLOCKS_PER_SEC));
 		// Update
