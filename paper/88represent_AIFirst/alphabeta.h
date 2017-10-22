@@ -58,7 +58,7 @@ vector<int> possiblebestdest;
 time_t start;
 bool timeUp = false;
 bool EnableRandom = false;
-bool randomness = 9;// choosing the best move in 90%
+bool randomness = 5;// choosing the best move in 50%
 
 
 int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int beta);
@@ -265,31 +265,6 @@ void moveOrdering(Board& bb,Byte player,vector<int>& possiblemoves, vector<int>&
 	}
 }
 
-int atk(Board &bb,int& dest,int& player,int& depth){
-	int value = 0;
-	// Capturing opponent piece earlier would be better (Shallow Depth)
-	if(player == black){
-		// Black
-		if(dest+15 < 120 && bb.board[dest+15] == !player){
-			value -= PieceAttackValue + ((loctable[dest] + depth)<<2);
-		}else if(dest+17 < 120 && bb.board[dest+17] == !player){
-			value -= PieceAttackValue + ((loctable[dest] + depth)<<2);
-		}else{
-			value += (PieceAttackValue + ((loctable[dest] + depth)<<2));
-		}
-	}else{
-		// White
-		if(dest-15 >= 0 && bb.board[dest-15] == !player){
-			value -= PieceAttackValue + ((loctable[dest] + depth)<<2);
-		}
-		else if(dest-17 >= 0 && bb.board[dest-17] == !player){
-			value -= PieceAttackValue + ((loctable[dest] + depth)<<2);
-		}else{
-			value += (PieceAttackValue + ((loctable[dest] + depth)<<2));
-		}		
-	}
-	return value;
-}
 
 int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int beta){
 	int value;
@@ -341,7 +316,7 @@ int abnegamax_incrupdate_quisc(Board &bb, int player, int depth,int alpha,int be
 
 		// a-b with Negamax and Incremental Updates and quiescence search
 		if(capturable == true){
-			value = atk(bb,dest,player,depth);
+			value = PieceAttackValue + ((loctable[dest] + depth)<<2);// Capturing opponent piece earlier would be better (Shallow Depth)
 			if(depth == 1){// do one more search if someone capture the piece at the bottom layer
 				value -= abnegamax_incrupdate_quisc(bb,!player,depth,-1*beta+value,-1*alpha+value);
 			}else{
@@ -402,7 +377,7 @@ void bestmove(Board &bb, Byte player, vector<char> &recorder){
 		}else{
 			// Record history
 			if(EnableRandom && possiblebestdest.size() >= 2){
-				if( rand() % 10 >= randomness ){
+				if( rand() % 10 < randomness ){
 					history_dest = possiblebestdest[possiblebestdest.size()-2];
 					history_src = possiblebestsrc[possiblebestsrc.size()-2];
 				}else{
